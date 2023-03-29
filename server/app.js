@@ -6,8 +6,6 @@ const mongoose = require('mongoose')
 const middleware = require('./utils/middleware')
 const usersRouter = require('./controllers/users')
 
-// console.log('connecting to', config.MONGODB_URI)
-
 mongoose.connect(config.MONGODB_URI)
   .then(() => {
     console.log('connected to MongoDB')

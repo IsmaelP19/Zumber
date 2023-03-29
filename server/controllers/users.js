@@ -5,9 +5,17 @@ const usersRouter = require('express').Router()
 usersRouter.post('/', async (request, response) => {
   const body = request.body
 
-  if (body.password.length < 3) {
-    return response.status(400).json({ error: 'password is too short' })
+  const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  if (!body.email) {
+    return response.status(400).json({ error: 'User validation failed: email: Path `email` is required.' })
   }
+  else if (!emailRegex.test(body.email)) {
+    return response.status(400).json({ error: 'invalid email' })
+  } else if (body.username.length < 3) {
+    return response.status(400).json({ error: 'username is too short' })
+  } else if (body.password.length < 3) {
+    return response.status(400).json({ error: 'password is too short' })
+  } 
 
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(body.password, saltRounds)
@@ -17,6 +25,7 @@ usersRouter.post('/', async (request, response) => {
     name: body.name,
     surname: body.surname,
     bio: body.bio,
+    email: body.email,
     passwordHash
   })
 
