@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
+const Zumby = require("./zumby")
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -45,18 +46,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     maxLength: 240
   },
-  // zumbies: [
-  //   {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: 'Zumby'
-  //   }
-  // ],´
-  // likes: [
-  //   {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: 'Zumby'
-  //   }
-  // ],
+  zumbies: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Zumby'
+    }
+  ],
+  likes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Zumby'
+    }
+  ],
   private: {
     type: Boolean,
     default: false
