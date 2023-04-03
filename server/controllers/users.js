@@ -48,5 +48,15 @@ usersRouter.get('/:id', async (request, response) => {
   }
 })
 
+usersRouter.delete('/:id', async (request, response) => {
+  const userToDelete = await User.findById(request.params.id)
+  if (userToDelete) {
+    await userToDelete.remove()
+    response.status(204).end()
+  } else {
+    response.status(404).json({ error: 'user not found' })
+  }
+}) 
+
 
 module.exports = usersRouter
