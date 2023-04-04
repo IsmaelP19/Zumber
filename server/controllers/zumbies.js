@@ -34,4 +34,23 @@ zumbiesRouter.get('/', async (request, response) => {
   response.json(zumbies.map((u) => u.toJSON()))
 })
 
+zumbiesRouter.get('/:id', async (request, response) => {
+  const zumby = await Zumby.findById(request.params.id)
+  if (zumby) {
+    response.json(zumby.toJSON())
+  } else {
+    response.status(404).end()
+  }
+})
+
+zumbiesRouter.delete('/:id', async (request, response) => {
+  const zumbyToDelete = await Zumby.findById(request.params.id)
+  if (zumbyToDelete) {
+    await zumbyToDelete.remove()
+    response.status(204).end()
+  } else {
+    response.status(404).json({ error: 'zumby not found' })
+  }
+})
+
 module.exports = zumbiesRouter

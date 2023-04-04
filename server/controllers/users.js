@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
@@ -6,6 +7,7 @@ usersRouter.post('/', async (request, response) => {
   const body = request.body
 
   const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
   if (!body.email) {
     return response.status(400).json({ error: 'User validation failed: email: Path `email` is required.' })
   }
@@ -15,7 +17,7 @@ usersRouter.post('/', async (request, response) => {
     return response.status(400).json({ error: 'username is too short' })
   } else if (body.password.length < 3) {
     return response.status(400).json({ error: 'password is too short' })
-  } 
+  }
 
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(body.password, saltRounds)
@@ -56,7 +58,54 @@ usersRouter.delete('/:id', async (request, response) => {
   } else {
     response.status(404).json({ error: 'user not found' })
   }
-}) 
+})
+
+usersRouter.put('/:id', async (request, response) => {
+  const body = request.body
+
+  const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+  if (body.email && !emailRegex.test(body.email)) {
+    return response.status(400).json({ error: 'invalid email' })
+  } else if (body.username && body.username.length < 3) {
+    return response.status(400).json({ error: 'username is too short' })
+  } else if (body.password && body.password.length < 3) {
+    return response.status(400).json({ error: 'password is too short' })
+  }
+
+  // The next lines should be uncommented when we have the frontend working
+  // It is not working now because if we try to login within the rest file, the token is generated different each time
+  // and we cannot use it to update the user. We will use localStorage to store the token on cache.
+
+  // const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+  // if (!request.token || !decodedToken.id) {
+  //   return response.status(401).json({ error: 'token missing or invalid' })
+  // }
+
+  const userToUpdate = await User.findById(request.params.id)
+
+  if (userToUpdate) {
+
+    const saltRounds = 10
+    const passwordHash = await bcrypt.hash(body.password || userToUpdate.passwordHash, saltRounds)
+
+    const user = {
+      username: body.username || userToUpdate.username,
+      name: body.name || userToUpdate.name,
+      surname: body.surname || userToUpdate.surname,
+      bio: body.bio || userToUpdate.bio,
+      email: body.email || userToUpdate.email,
+      passwordHash: passwordHash || userToUpdate.passwordHash
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(request.params.id, user, { new: true })
+    response.json(updatedUser)
+  } else {
+    response.status(404).json({ error: 'user not found' })
+  }
+
+})
 
 
 module.exports = usersRouter
