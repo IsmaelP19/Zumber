@@ -2,7 +2,7 @@ POST http://localhost:3000/api/zumbies/
 Content-Type: application/json
 
 {
-    "content": "This is a zumby",
-    "user": "6423923f0e27dd2329e96277"
+    "content": "This is a new zumby! :D",
+    "user": "642b57ee5c0ffc6e4c66216c"
 }
 

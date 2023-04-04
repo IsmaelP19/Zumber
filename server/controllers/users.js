@@ -37,7 +37,7 @@ usersRouter.post('/', async (request, response) => {
 })
 
 usersRouter.get('/', async (request, response) => {
-  const users = await User.find({})
+  const users = await User.find({}).populate('zumbies', { content: 1, date: 1, comments: 1, likes: 1 })
   response.json(users.map(u => u.toJSON()))
 })
 
@@ -53,6 +53,10 @@ usersRouter.get('/:id', async (request, response) => {
 usersRouter.delete('/:id', async (request, response) => {
   const userToDelete = await User.findById(request.params.id)
   if (userToDelete) {
+    zumbiesToDelete = await Zumby.find({ user: userToDelete._id })
+    zumbiesToDelete.forEach(async (zumby) => {
+      await zumby.remove()
+    })
     await userToDelete.remove()
     response.status(204).end()
   } else {
