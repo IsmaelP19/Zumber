@@ -46,8 +46,9 @@ zumbiesRouter.get('/:id', async (request, response) => {
 zumbiesRouter.delete('/:id', async (request, response) => {
   const zumbyToDelete = await Zumby.findById(request.params.id)
   if (zumbyToDelete) {
-    const userToDeleteZumby = zumbyToDelete.user 
+    const userToDeleteZumby = await User.findById(zumbyToDelete.user)
     userToDeleteZumby.zumbies = userToDeleteZumby.zumbies.filter(z => z.toString() !== zumbyToDelete._id.toString())
+    await userToDeleteZumby.save()
     await zumbyToDelete.remove()
     response.status(204).end()
   } else {
