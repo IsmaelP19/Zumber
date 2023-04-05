@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
+const Zumby = require('../models/zumby')
 const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 
