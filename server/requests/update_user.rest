@@ -1,0 +1,7 @@
+PUT http://localhost:3000/api/users/642b57ee5c0ffc6e4c66216c
+Content-Type: application/json
+# Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImlzbXBlcm9ydCIsImlkIjoiNjQyYjU3ZWU1YzBmZmM2ZTRjNjYyMTZjIiwiaWF0IjoxNjgwNTcwNTc4fQ.nQScabqIWavSM6K433rAxfk25y0DT2tUtKisfV72cnc
+
+{
+  "name": "Ismael"
+}

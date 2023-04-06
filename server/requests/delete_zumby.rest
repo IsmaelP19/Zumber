@@ -1,0 +1,1 @@
+DELETE http://localhost:3000/api/zumbies/642cb4b91a83fe4854477dcb
