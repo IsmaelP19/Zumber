@@ -25,7 +25,7 @@ const FormInput = ({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
-        {...(type === "file" && { maxlength: 200000 })}
+        // {...(type === "file" && { maxLength: 200000 })}
         {...(type === "file" && { accept: ".jpeg, .png, .jpg" })}
       />
     </div>
