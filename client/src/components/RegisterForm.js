@@ -51,9 +51,19 @@ const validate = (values) => {
 
 const RegisterForm = () => {
   const [image, setImage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null);
 
   function handleChange(event) {
     const files = event.target.files;
+
+    const file = files[0];
+    const fileSize = file.size / 1024 / 1024; // in MB
+    if (fileSize > 2) {
+      setErrorMessage("El tamaño máximo de la imagen es de 2MB")
+      return
+    }
+
+    setErrorMessage(null)
 
     Promise.all(
       [...files].map((file) => {
@@ -110,6 +120,10 @@ const RegisterForm = () => {
     },
 
     onSubmit: async (values) => {
+
+      if (errorMessage) {
+        return
+      }
       
       try{
         console.log('image: ', formik.values.image)
@@ -220,10 +234,8 @@ const RegisterForm = () => {
             name="image"
             onChange={handleChange}
           />
-          {formik.touched.image && formik.errors.image ? (
-            <div className="text-red-400 font-bold px-4">
-              {formik.errors.image}
-            </div>
+          {errorMessage ? (
+            <div className="text-red-400 font-bold px-4">{errorMessage}</div>
           ) : null}
 
           {/* <Button type="submit">Registrarse</Button> */}
