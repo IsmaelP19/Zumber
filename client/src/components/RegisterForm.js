@@ -3,6 +3,7 @@ import registerService from "../services/register"
 import Button from "./Button"
 import FormInput from "./FormInput"
 import { useFormik } from 'formik'
+import { showMessage } from "../utils/utils"
 
 const validate = (values) => {
   const errors = {}
@@ -49,7 +50,7 @@ const validate = (values) => {
 }
 
 
-const RegisterForm = () => {
+export default function RegisterForm ({ setMessage }) {
   const [errorMessage, setErrorMessage] = useState(null);
 
   function handleChange(event) {
@@ -117,19 +118,34 @@ const RegisterForm = () => {
       image: ""
     },
 
-    onSubmit: async (values) => {
+    onSubmit: values => {
 
       if (errorMessage) {
         return
       }
       
-      try{
-        await registerService.register(values)
+      
+      registerService.register(values)
+      .then( response => {
+        showMessage('Se ha registrado satisfactoriamente 👏', 'success', setMessage, 4000)
+        formik.resetForm()
+        setTimeout(() => {
+          window.location.href = '/'
+        }, 4000)
+      })
 
-      }catch(error){
-        console.log(error)
         
-      }
+      
+      .catch(error => {
+        console.log(error)
+        if (error.response.data.error.includes('expected `username` to be unique')) {
+          showMessage('El nombre de usuario ya está en uso', 'error', setMessage, 4000)
+        } else if (error.response.data.error.includes('expected `email` to be unique')) {
+          showMessage('El correo electrónico ya está en uso', 'error', setMessage, 4000)
+        } else {
+          showMessage('Ha ocurrido un error. Por favor, prueba más tarde ⌛', 'error', setMessage, 4000)
+        }
+      })
     },
 
     validate
@@ -176,6 +192,7 @@ const RegisterForm = () => {
             value={formik.values.email}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
+            required
           />
           {formik.touched.email && formik.errors.email ? (
             <div className="text-red-400 font-bold px-4">
@@ -190,6 +207,7 @@ const RegisterForm = () => {
             value={formik.values.username}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
+            required
           />
           {formik.touched.username && formik.errors.username ? (
             <div className="text-red-400 font-bold px-4">
@@ -204,9 +222,10 @@ const RegisterForm = () => {
             value={formik.values.password}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
+            required
           />
           {formik.touched.password && formik.errors.password ? (
-            <div className="text-red-400 font-bold px-4">
+            <div className="text-red-400 font-bold px-8 md:px-2 md:max-w-lg max-w-sm text-center md:text-left">
               {formik.errors.password}
             </div>
           ) : null}
@@ -235,6 +254,8 @@ const RegisterForm = () => {
             <div className="text-red-400 font-bold px-4">{errorMessage}</div>
           ) : null}
 
+          <span className="text-red-400 font-bold py-2">* Campos obligatorios</span>
+
           <Button type="submit">Registrarse</Button>
           
         </form>
@@ -242,5 +263,3 @@ const RegisterForm = () => {
     );
     
 }
-
-export default RegisterForm

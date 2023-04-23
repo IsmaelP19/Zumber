@@ -1,6 +1,6 @@
 import React from "react";
 
-const FormInput = ({
+export default function FormInput ({
   label,
   type,
   name,
@@ -8,13 +8,15 @@ const FormInput = ({
   onChange,
   onBlur,
   component = "input",
-}) => {
+  required = false
+})  {
   const InputComponent = component === "textarea" ? "textarea" : "input";
 
   return (
     <div className="flex flex-col md:flex-row my-3">
       <label className="flex text-light-gray w-44 items-center text-lg">
-        {label}
+        {label} 
+        {required && <span className="text-red-500 pl-1">*</span>}
       </label>
       <InputComponent
         className={`border-2 p-2 border-light-gray rounded-md w-80 ${
@@ -25,11 +27,8 @@ const FormInput = ({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
-        // {...(type === "file" && { maxLength: 200000 })}
         {...(type === "file" && { accept: ".jpeg, .png, .jpg" })}
       />
     </div>
   );
 };
-
-export default FormInput
