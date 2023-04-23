@@ -50,7 +50,6 @@ const validate = (values) => {
 
 
 const RegisterForm = () => {
-  const [image, setImage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null);
 
   function handleChange(event) {
@@ -103,7 +102,6 @@ const RegisterForm = () => {
       })
     ).then((base64Images) => {
       formik.setFieldValue("image", base64Images[0]);
-      setImage(base64Images[0]);
     });
   }
 
@@ -126,7 +124,6 @@ const RegisterForm = () => {
       }
       
       try{
-        console.log('image: ', formik.values.image)
         await registerService.register(values)
 
       }catch(error){
@@ -222,7 +219,7 @@ const RegisterForm = () => {
             onBlur={formik.handleBlur}
             component="textarea"
           />
-          {formik.touched.bio & formik.errors.bio ? (
+          {formik.touched.bio && formik.errors.bio ? (
             <div className="text-red-400 font-bold px-4">
               {formik.errors.bio}
             </div>
@@ -238,13 +235,8 @@ const RegisterForm = () => {
             <div className="text-red-400 font-bold px-4">{errorMessage}</div>
           ) : null}
 
-          {/* <Button type="submit">Registrarse</Button> */}
-          <button
-            type="submit"
-            className="bg-gold text-dark-purple font-bold py-2 m-4 text-lg px-4 rounded"
-          >
-            Registrarse
-          </button>
+          <Button type="submit">Registrarse</Button>
+          
         </form>
       </div>
     );
