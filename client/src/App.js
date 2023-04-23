@@ -8,8 +8,8 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <div className="App w-full h-full">
-      <div className="bg-dark-blue w-full h-full">
+    <div className="App flex flex-col min-h-screen">
+      <div className="flex-1 bg-dark-blue">
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<h1> Home </h1>} />
@@ -18,7 +18,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </div>
-      <Footer />
+      <Footer className='bottom-0'/>
     </div>
   );
 }
