@@ -1,0 +1,56 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Backend",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/app.js",
+      "cwd": "${workspaceFolder}",
+      "protocol": "inspector",
+      "runtimeArgs": [
+        "--inspect"
+      ],
+      "port": 9229
+    },
+    {
+      "name": "Frontend",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000/",
+      "webRoot": "${workspaceFolder}/client/src",
+      "sourceMapPathOverrides": {
+        "webpack:///src/": "${webRoot}/"
+      },
+      "sourceMaps": true
+    },
+    {
+      "name": "Backend & Frontend",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/app.js",
+      "cwd": "${workspaceFolder}",
+      "protocol": "inspector",
+      "runtimeArgs": [
+        "--inspect"
+      ],
+      "port": 9229,
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run-script",
+        "dev"
+      ],
+      "console": "integratedTerminal"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug All",
+      "configurations": [
+        "Backend",
+        "Frontend",
+        "Backend & Frontend"
+      ]
+    }
+  ]
+}

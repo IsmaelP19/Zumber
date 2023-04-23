@@ -8,16 +8,25 @@ usersRouter.post('/', async (request, response) => {
   const body = request.body
 
   const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])/;
 
   if (!body.email) {
     return response.status(400).json({ error: 'User validation failed: email: Path `email` is required.' })
-  }
-  else if (!emailRegex.test(body.email)) {
+  }else if (!emailRegex.test(body.email)) {
     return response.status(400).json({ error: 'invalid email' })
   } else if (body.username.length < 3) {
     return response.status(400).json({ error: 'username is too short' })
-  } else if (body.password.length < 3) {
+  } else if (body.password.length < 8) {
     return response.status(400).json({ error: 'password is too short' })
+  } else if (!passwordRegex.test(body.password)) {
+    return response
+      .status(400)
+      .json({
+        error:
+          "password has contains at least one uppercase letter, one lowercase letter, one number and one special character",
+      });
+  } else if (body.bio.length > 240) {
+    return response.status(400).json({ error: "bio is too long" });
   }
 
   const saltRounds = 10
@@ -29,6 +38,7 @@ usersRouter.post('/', async (request, response) => {
     surname: body.surname,
     bio: body.bio,
     email: body.email,
+    image: body.image,
     passwordHash
   })
 
@@ -69,13 +79,27 @@ usersRouter.put('/:id', async (request, response) => {
   const body = request.body
 
   const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])/;
 
-  if (body.email && !emailRegex.test(body.email)) {
-    return response.status(400).json({ error: 'invalid email' })
-  } else if (body.username && body.username.length < 3) {
-    return response.status(400).json({ error: 'username is too short' })
-  } else if (body.password && body.password.length < 3) {
-    return response.status(400).json({ error: 'password is too short' })
+  if (!body.email) {
+    return response
+      .status(400)
+      .json({
+        error: "User validation failed: email: Path `email` is required.",
+      });
+  } else if (!emailRegex.test(body.email)) {
+    return response.status(400).json({ error: "invalid email" });
+  } else if (body.username.length < 3) {
+    return response.status(400).json({ error: "username is too short" });
+  } else if (body.password.length < 8) {
+    return response.status(400).json({ error: "password is too short" });
+  } else if (!passwordRegex.test(body.password)) {
+    return response.status(400).json({
+      error:
+        "password has contains at least one uppercase letter, one lowercase letter, one number and one special character",
+    });
+  } else if (body.bio.length > 240) {
+    return response.status(400).json({ error: "bio is too long" });
   }
 
   // The next lines should be uncommented when we have the frontend working
@@ -101,6 +125,7 @@ usersRouter.put('/:id', async (request, response) => {
       surname: body.surname || userToUpdate.surname,
       bio: body.bio || userToUpdate.bio,
       email: body.email || userToUpdate.email,
+      image: body.image || userToUpdate.image,
       passwordHash: passwordHash || userToUpdate.passwordHash
     }
 
