@@ -1,29 +1,48 @@
 import logo from './logo.svg';
 import './App.css';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import RegisterForm from './components/RegisterForm'; 
+import LoginForm from './components/LoginForm'; 
+import Notification from './components/Notification';
+
 
 function App() {
+  const [message, setMessage] = useState([])
+  const [isLogged, setIsLogged] = useState(false)
+  async function getUser () {
+    const loggedUser = localStorage.getItem('loggedUser')
+    if (loggedUser) {
+      setIsLogged(true)
+    }
+
+  }
+
+  useEffect(() => {
+    getUser()
+  }, [])
   return (
-    <div className="App bg-dark-blue">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p className="text-dark-purple">
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <div className="mt-10 ml-10 text-light-gray">
-          Click the following button
-        </div>
-        <button className="mb-10 mt-10 ml-10 p-2 rounded-lg bg-gold text-dark-purple">
-          Click me!
-        </button>
-      </header>
+    <div className='App w-full h-screen'>
+      <div className='h-24 bg-dark-blue border-b border-gray-400'>
+        AA
+      </div>
+
+
+      <div className='bg-dark-blue w-full h-full'>
+      <Notification message={message[0]} type={message[1]} />
+      <BrowserRouter>
+        <Routes>
+          
+            <Route path="/" element={<h1> Home </h1>} />
+            <Route path="/register" element={<RegisterForm setMessage={setMessage}/>} />
+
+            <Route path="/login" element={isLogged ? <Navigate to="/" /> : <LoginForm setMessage={setMessage} isLogged={isLogged} />} />
+            <Route path="*" element={<h1> 404 </h1>} />
+        
+        </Routes>
+      </BrowserRouter>
+      </div>
+      
     </div>
   );
 }
