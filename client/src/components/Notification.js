@@ -14,7 +14,7 @@ export default function Notification ({ message, type }) {
   }
 
   return (
-    <div className={`items-center ${style} font-bold w-full md:w-4/5 p-6 m-auto md:my-4 md:rounded-2xl `}>
+    <div className={`items-center ${style} font-bold w-full md:w-4/5 lg:w-[820px] p-6 md:m-auto md:my-4 md:rounded-2xl `}>
       {message}
     </div>
   )

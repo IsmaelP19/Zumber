@@ -14,7 +14,7 @@ export default function FormInput ({
 
   return (
     <div className="flex flex-col md:flex-row my-3">
-      <label className="flex text-light-gray w-44 items-center text-lg">
+      <label className="flex text-dark-blue w-44 items-center text-lg">
         {label} 
         {required && <span className="text-red-500 pl-1">*</span>}
       </label>

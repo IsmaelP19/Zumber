@@ -154,7 +154,7 @@ export default function RegisterForm ({ setMessage }) {
 
 
     return (
-      <div className="flex h-full items-center justify-center">
+      <div className="flex justify-center w-full">
         <form
           className="flex flex-col items-center justify-center"
           onSubmit={formik.handleSubmit}
