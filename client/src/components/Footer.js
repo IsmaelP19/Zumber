@@ -8,7 +8,6 @@ export default function Footer() {
     <footer className="bg-dark-blue text-light-gray text-center p-3 border-t-2 border-t-light-gray bottom-0 w-full">
       <div className="container mx-auto flex justify-between items-center flex-col sm:flex-row">
         <div className="text-base mb-3 sm:mb-0">
-          {" "}
           &copy; {year} Zumber, Inc.
         </div>
         <div className="flex items-center">
