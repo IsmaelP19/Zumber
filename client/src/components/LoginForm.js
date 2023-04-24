@@ -60,9 +60,9 @@ export default function LoginForm ({ setMessage, isLogged }) {
 
   return (
     isDone &&
-    <div className="flex h-full items-center justify-center">
+    <div className="flex justify-center w-full">
       <form
-        className="flex flex-col items-center justify-center"
+        className="flex flex-col items-center justify-center bg-dark-blue px-6 py-6 rounded-xl border-2 border-gray-600 shadow-xl"
         onSubmit={formik.handleSubmit}
       >
 
