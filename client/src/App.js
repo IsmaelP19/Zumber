@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
@@ -26,12 +25,11 @@ function App() {
   }, [])
   return (
     <div className="App flex flex-col min-h-screen">
-      
       <Navbar isLogged={isLogged} username={user} />
-
-
-      <div className='flex-1 bg-dark-blue'>
-      <Notification message={message[0]} type={message[1]} />
+      <div className='bg-dark-blue border-0 border-none'>
+        <Notification message={message[0]} type={message[1]} />
+      </div>
+      <div className='flex-1 flex flex-col justify-center bg-light-blue'>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<h1> Home </h1>} />

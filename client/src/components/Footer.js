@@ -5,7 +5,7 @@ export default function Footer() {
   const year = today.getFullYear();
 
   return (
-    <footer className="bg-dark-blue text-light-gray text-center p-3 border-t-2 border-t-light-gray bottom-0 w-full">
+    <footer className="bg-dark-blue text-light-gray text-center p-3 border-t border-gray-600 bottom-0 w-full">
       <div className="container mx-auto flex justify-between items-center flex-col sm:flex-row">
         <div className="text-base mb-3 sm:mb-0">
           &copy; {year} Zumber, Inc.
@@ -17,7 +17,7 @@ export default function Footer() {
               href="https://github.com/IsmaelP19"
               target="_blank"
               rel="noreferrer"
-              className="text-gold"
+              className="text-gold hover:underline"
             >
               Ismael
             </a>
@@ -26,7 +26,7 @@ export default function Footer() {
               href="https://github.com/migromarj"
               target="_blank"
               rel="noreferrer"
-              className="text-gold"
+              className="text-gold hover:underline"
             >
               Miguel
             </a>

@@ -31,11 +31,12 @@ export default function Navbar({ isLogged, username }) {
           <ul className='hidden md:flex md:h-20'>
             {
               links.map((link, index) => (
-                <li key={index} className='cursor-pointer hover:bg-gold hover:text-gray-700 text-white h-full flex items-center transition-all duration-200 px-4' >
-                  <a href={link.href} className='h-full w-full flex items-center'>
+                <a href={link.href} key={index} className='cursor-pointer hover:bg-gold hover:text-gray-700 text-white transition-all duration-200'>
+                  <li  className=' h-full flex items-center  px-4' >
                     {link.name}
-                  </a>
-                </li>
+                  </li>
+                </a>
+                
 
               ))
             }
@@ -44,7 +45,7 @@ export default function Navbar({ isLogged, username }) {
 
           <div className='md:hidden'>
             <button onClick={() => setOpenDrawer(!isOpenDrawer)} className='flex items-center px-3 py-2 border rounded text-white border-white cursor-pointer'>
-              <svg className='fill-current h-3 w-3' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'>
+              <svg className='fill-current h-5 w-5' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'>
                 <title>Menu</title>
                 <path d='M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z' />
               </svg>
@@ -79,10 +80,18 @@ export default function Navbar({ isLogged, username }) {
                 }
               </div>
             ) : (
-              <div className='flex items-center gap-10'>
-                <a href='/login' className='text-white'>Iniciar sesión</a>
-                <a href='/register' className='text-white'>Registrarse</a>
-              </div>
+              <ul className='hidden md:flex md:h-20'>
+                <a href='/login' className='cursor-pointer hover:bg-gold hover:text-gray-700 text-white transition-all duration-200'>
+                  <li  className=' h-full flex items-center px-4' >
+                    Iniciar sesión
+                  </li>
+                </a>
+                <a href='/register' className='cursor-pointer hover:bg-gold hover:text-gray-700 text-white transition-all duration-200'>
+                  <li  className=' h-full flex items-center px-4' >
+                    Registrarse
+                  </li>
+                </a>
+              </ul>
             )
           }
         </div>
@@ -93,41 +102,41 @@ export default function Navbar({ isLogged, username }) {
             <ul>
               {
                 links.map((link, index) => (
-                  <li key={index} className='text-center font-bold text-xl py-4 hover:bg-gold hover:text-gray-700 text-white '>
-                    <a href={link.href} onClick={() => setOpenDrawer(!isOpenDrawer)}>
+                  <a href={link.href} key={index}  onClick={() => setOpenDrawer(!isOpenDrawer)}>
+                    <li className='text-center font-bold text-xl py-4 hover:bg-gold hover:text-gray-700 text-white '>
                       {link.name}
-                    </a>
-                  </li>
+                    </li>
+                  </a>
                 ))
               }
               {isLogged ? (
                 <>
-                  <li className='text-center font-bold text-xl py-5 hover:bg-gold hover:text-gray-700 text-white'>
-                    <a href='/profile' onClick={() => setOpenDrawer(!isOpenDrawer)}>
+                  <a href='/profile' onClick={() => setOpenDrawer(!isOpenDrawer)}>
+                    <li className='text-center font-bold text-xl py-5 hover:bg-gold hover:text-gray-700 text-white'>
                       Perfil
-                    </a>
-                  </li>
-                  <li className='text-center font-bold text-xl py-5 hover:bg-gold hover:text-gray-700 text-white'>
-                    <a href='/' onClick={() => {
-                      localStorage.removeItem('loggedUser')
-                      setOpenDrawer(!isOpenDrawer)
-                    }}>
+                    </li>
+                  </a>
+                  <a href='/' onClick={() => {
+                    localStorage.removeItem('loggedUser')
+                    setOpenDrawer(!isOpenDrawer)
+                  }}>
+                    <li className='text-center font-bold text-xl py-5 hover:bg-gold hover:text-gray-700 text-white'>  
                       Cerrar sesión
-                    </a>
-                  </li>
+                    </li>
+                  </a>
                 </>
               ) : (
-<>
-                  <li className='text-center font-bold text-xl py-5 hover:bg-gold hover:text-gray-700 text-white'>
-                    <a href='/login' onClick={() => setOpenDrawer(!isOpenDrawer)}>
-                      Iniciar sesión
-                    </a>
-                  </li>
-                  <li className='text-center font-bold text-xl py-5 hover:bg-gold hover:text-gray-700 text-white'>
-                    <a href='/register' onClick={() => {setOpenDrawer(!isOpenDrawer)}}>
-                      Registrarse
-                    </a>
-                  </li>
+                <>
+                  <a href='/login' onClick={() => setOpenDrawer(!isOpenDrawer)}>
+                    <li className='text-center font-bold text-xl py-5 hover:bg-gold hover:text-gray-700 text-white'>
+                        Iniciar sesión
+                    </li>
+                  </a>
+                  <a href='/register' onClick={() => {setOpenDrawer(!isOpenDrawer)}}>
+                    <li className='text-center font-bold text-xl py-5 hover:bg-gold hover:text-gray-700 text-white'>
+                        Registrarse
+                    </li>
+                  </a>
                 </>
               )
               }
