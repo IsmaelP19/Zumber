@@ -139,8 +139,6 @@ usersRouter.put('/:id', async (request, response) => {
       likes: body.likes || userToUpdate.likes,
       followers: body.followers || userToUpdate.followers,
       following: body.following || userToUpdate.following,
-      requests: body.requests || userToUpdate.requests,
-      private: body.private || userToUpdate.private,
       verified: body.verified || userToUpdate.verified,
       zumbies: body.zumbies || userToUpdate.zumbies,
       passwordHash: passwordHash
