@@ -33,12 +33,6 @@ const userSchema = new mongoose.Schema({
       ref: 'User'
     }
   ],
-  requests: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    }
-  ],
   image: {
     type: String,
   },
@@ -58,10 +52,6 @@ const userSchema = new mongoose.Schema({
       ref: 'Zumby'
     }
   ],
-  private: {
-    type: Boolean,
-    default: false
-  },
   verified: {
     type: Boolean,
     default: false
@@ -76,7 +66,6 @@ userSchema.set('toJSON', {
     returnedObject.id = returnedObject._id.toString()
     delete returnedObject._id
     delete returnedObject.__v
-    // the passwordHash should not be revealed
     delete returnedObject.passwordHash
   }
 })

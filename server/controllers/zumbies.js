@@ -30,7 +30,7 @@ zumbiesRouter.post('/', async (request, response) => {
 })
 
 zumbiesRouter.get('/', async (request, response) => {
-  const zumbies = await Zumby.find({})
+  const zumbies = await Zumby.find({}).populate('user', { username: 1, name: 1, image: 1, private: 1 }) 
   response.json(zumbies.map((u) => u.toJSON()))
 })
 
@@ -55,5 +55,31 @@ zumbiesRouter.delete('/:id', async (request, response) => {
     response.status(404).json({ error: 'zumby not found' })
   }
 })
+
+zumbiesRouter.put('/:id', async (request, response) => {
+  const body = request.body
+
+  if (body.content.length < 1) {
+    return response.status(400).json({ error: 'content is too short' })
+  } else if (body.content.length > 140) {
+    return response.status(400).json({ error: 'content is too long' })
+  }
+
+  const zumbyToUpdate = await Zumby.findById(request.params.id)
+
+  if (zumbyToUpdate) {
+
+    const zumby = {
+      likes: body.likes || zumbyToUpdate.likes,
+      comments: body.comments || zumbyToUpdate.comments,
+    }
+
+    const updatedZumby = await Zumby.findByIdAndUpdate(request.params.id, zumby, { new: true })
+    response.json(updatedZumby)
+  } else {
+    response.status(404).json({ error: 'zumby not found' })
+  }
+})
+  
 
 module.exports = zumbiesRouter

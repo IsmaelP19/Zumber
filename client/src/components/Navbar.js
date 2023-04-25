@@ -1,7 +1,7 @@
 import logo from '../logo.svg'
 import { useState } from 'react'
 
-export default function Navbar({ isLogged, username }) {
+export default function Navbar({ user }) {
   const [isOpenDrawer, setOpenDrawer] = useState(false)
   const [isOpenDropdown, setOpenDropdown] = useState(false)
 
@@ -55,10 +55,10 @@ export default function Navbar({ isLogged, username }) {
 
         <div className='hidden md:flex items-center gap-10 font-bold text-xl'>
           {
-            isLogged ? (
+            user ? (
               <div >
                 <button onClick={() => setOpenDropdown(!isOpenDropdown)} className='flex items-center px-3 py-2 text-white'>
-                  <span className='text-white'>{username}</span>
+                  <span className='text-white'>{user.username}</span>
                   {/* add dropdown svg icon */}
                   <svg
                     className="w-5 h-5 inline-block ml-1"
@@ -102,25 +102,22 @@ export default function Navbar({ isLogged, username }) {
             <ul>
               {
                 links.map((link, index) => (
-                  <a href={link.href} key={index}  onClick={() => setOpenDrawer(!isOpenDrawer)}>
+                  <a href={link.href} key={index}  >
                     <li className='text-center font-bold text-xl py-4 hover:bg-gold hover:text-gray-700 text-white '>
                       {link.name}
                     </li>
                   </a>
                 ))
               }
-              {isLogged ? (
+              {user ? (
                 <>
-                  <a href='/profile' onClick={() => setOpenDrawer(!isOpenDrawer)}>
-                    <li className='text-center font-bold text-xl py-5 hover:bg-gold hover:text-gray-700 text-white'>
+                  <a href='/profile'>
+                    <li className='text-center font-bold text-xl py-4 hover:bg-gold hover:text-gray-700 text-white'>
                       Perfil
                     </li>
                   </a>
-                  <a href='/' onClick={() => {
-                    localStorage.removeItem('loggedUser')
-                    setOpenDrawer(!isOpenDrawer)
-                  }}>
-                    <li className='text-center font-bold text-xl py-5 hover:bg-gold hover:text-gray-700 text-white'>  
+                  <a href='/' onClick={() => {localStorage.removeItem('loggedUser')}}>
+                    <li className='text-center font-bold text-xl py-4 hover:bg-gold hover:text-gray-700 text-white'>  
                       Cerrar sesión
                     </li>
                   </a>
@@ -128,12 +125,12 @@ export default function Navbar({ isLogged, username }) {
               ) : (
                 <>
                   <a href='/login' onClick={() => setOpenDrawer(!isOpenDrawer)}>
-                    <li className='text-center font-bold text-xl py-5 hover:bg-gold hover:text-gray-700 text-white'>
+                    <li className='text-center font-bold text-xl py-4 hover:bg-gold hover:text-gray-700 text-white'>
                         Iniciar sesión
                     </li>
                   </a>
                   <a href='/register' onClick={() => {setOpenDrawer(!isOpenDrawer)}}>
-                    <li className='text-center font-bold text-xl py-5 hover:bg-gold hover:text-gray-700 text-white'>
+                    <li className='text-center font-bold text-xl py-4 hover:bg-gold hover:text-gray-700 text-white'>
                         Registrarse
                     </li>
                   </a>

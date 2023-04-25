@@ -61,10 +61,19 @@ usersRouter.get('/:id', async (request, response) => {
   }
 })
 
+usersRouter.get('/username/:username', async (request, response) => {
+  const user = await User.findOne({ username: request.params.username })
+  if (user) {
+    response.json(user)
+  } else {
+    response.status(404).end()
+  }
+})
+
 usersRouter.delete('/:id', async (request, response) => {
   const userToDelete = await User.findById(request.params.id)
   if (userToDelete) {
-    zumbiesToDelete = await Zumby.find({ user: userToDelete._id })
+    let zumbiesToDelete = await Zumby.find({ user: userToDelete._id })
     zumbiesToDelete.forEach(async (zumby) => {
       await zumby.remove()
     })
@@ -91,9 +100,9 @@ usersRouter.put('/:id', async (request, response) => {
     return response.status(400).json({ error: "invalid email" });
   } else if (body.username.length < 3) {
     return response.status(400).json({ error: "username is too short" });
-  } else if (body.password.length < 8) {
+  } else if (body.password && body.password.length < 8) {
     return response.status(400).json({ error: "password is too short" });
-  } else if (!passwordRegex.test(body.password)) {
+  } else if (body.password && !passwordRegex.test(body.password)) {
     return response.status(400).json({
       error:
         "password has contains at least one uppercase letter, one lowercase letter, one number and one special character",
@@ -105,28 +114,34 @@ usersRouter.put('/:id', async (request, response) => {
   // The next lines should be uncommented when we have the frontend working
   // It is not working now because if we try to login within the rest file, the token is generated different each time
   // and we cannot use it to update the user. We will use localStorage to store the token on cache.
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
-  // const decodedToken = jwt.verify(request.token, process.env.SECRET)
-
-  // if (!request.token || !decodedToken.id) {
-  //   return response.status(401).json({ error: 'token missing or invalid' })
-  // }
+  if (!request.token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
 
   const userToUpdate = await User.findById(request.params.id)
 
   if (userToUpdate) {
-
     const saltRounds = 10
-    const passwordHash = await bcrypt.hash(body.password || userToUpdate.passwordHash, saltRounds)
+    let passwordHash = userToUpdate.passwordHash
+    if (body.password) {
+      passwordHash = await bcrypt.hash(body.password, saltRounds)
+    }
 
-    const user = {
+    let user = {
       username: body.username || userToUpdate.username,
       name: body.name || userToUpdate.name,
       surname: body.surname || userToUpdate.surname,
       bio: body.bio || userToUpdate.bio,
       email: body.email || userToUpdate.email,
       image: body.image || userToUpdate.image,
-      passwordHash: passwordHash || userToUpdate.passwordHash
+      likes: body.likes || userToUpdate.likes,
+      followers: body.followers || userToUpdate.followers,
+      following: body.following || userToUpdate.following,
+      verified: body.verified || userToUpdate.verified,
+      zumbies: body.zumbies || userToUpdate.zumbies,
+      passwordHash: passwordHash
     }
 
     const updatedUser = await User.findByIdAndUpdate(request.params.id, user, { new: true })
