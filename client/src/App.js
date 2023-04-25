@@ -7,6 +7,7 @@ import Notification from './components/Notification';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import Index from './components/Index';
+import ProfileForm from './components/ProfileForm';
 import userService from './services/users';
 
 function App() {
@@ -39,6 +40,8 @@ function App() {
             <Route path="/" element={<Index isLogged={isLogged} loggedUser={user} />} />
             <Route path="/register" element={<RegisterForm setMessage={setMessage}/>} />
             <Route path="/login" element={isLogged ? <Navigate to="/" /> : <LoginForm setMessage={setMessage} isLogged={isLogged} />} />
+            {/* <Route path="/profile/edit" element={isLogged ? <ProfileForm setMessage={setMessage} loggedUser={user} />: <Navigate to="/" />} /> */}
+            <Route path="/profile/edit" element={<ProfileForm setMessage={setMessage} loggedUser={user} />} />
             <Route path="*" element={<h1> 404 </h1>} />
           </Routes>
         </BrowserRouter>
