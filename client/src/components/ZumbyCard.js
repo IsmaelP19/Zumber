@@ -3,11 +3,12 @@ import userService from "../services/users";
 import zumbyService from "../services/zumbies";
 import defaultImage from "../utils/static/default.jpg";
 import { FcLikePlaceholder, FcLike } from "react-icons/fc";
-import { BiComment } from "react-icons/bi";
+import { AiOutlineMessage } from "react-icons/ai";
 
 export default function ZumbyCard({ zumby, loggedUser }) {
   const [liked, setLiked] = useState(false);
-
+  const [likes, setLikes] = useState(zumby.likes.length);
+  const [comments, setComments] = useState(zumby.comments.length);
 
   useEffect(() => {
     if (loggedUser) {
@@ -16,6 +17,11 @@ export default function ZumbyCard({ zumby, loggedUser }) {
         : setLiked(false);
     } 
   }, [loggedUser, zumby.likes]);
+
+  useEffect(() => {
+    setLikes(zumby.likes.length);
+    setComments(zumby.comments.length);
+  }, [zumby.likes, zumby.comments]);
 
   function handleClick() {
     if (liked) {
@@ -55,22 +61,24 @@ export default function ZumbyCard({ zumby, loggedUser }) {
               <div className="">{zumby.content}</div>
             </div>
           </div>
-          <div className="flex flex-row justify-around h-10 mb-1 text-lg">
-            <BiComment className="text-gold" />
-            {loggedUser ? (
-              liked ? (
-                <button onClick={handleClick}>
-                  <FcLike />
+          {loggedUser ? (
+            <div className="flex flex-row justify-around h-10 mb-1 text-lg">
+              <span className="text-light-gray font-bold">
+                {comments}&nbsp;&nbsp;
+                <button>
+                  <AiOutlineMessage />
                 </button>
-              ) : (
+              </span>
+              <span className="text-light-gray font-bold">
+                {likes}&nbsp;&nbsp;
                 <button onClick={handleClick}>
-                  <FcLikePlaceholder />
+                  {liked ? <FcLike /> : <FcLikePlaceholder />}
                 </button>
-              )
-            ) : (
-              <></>
-            )}
-          </div>
+              </span>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     );
