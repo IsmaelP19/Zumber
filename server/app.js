@@ -23,6 +23,7 @@ app.use(cors())
 app.use(bodyParser.json({ limit: "2mb"}));
 app.use(bodyParser.urlencoded({ limit: "2mb", extended: true }));
 app.use(express.json());
+app.use(middleware.tokenExtractor);
 
 app.use("/api/login", loginRouter);
 app.use("/api/users", usersRouter);

@@ -6,4 +6,9 @@ const getAll = () => {
   return request.then((response) => response.data);
 };
 
-export default { getAll };
+const update = async (id, updatedZumby) => {
+  const response = await axios.put(`${baseURL}/${id}`, updatedZumby);
+  return response.data;
+};
+
+export default { getAll, update };

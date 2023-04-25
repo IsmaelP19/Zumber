@@ -23,6 +23,9 @@ module.exports = {
         "screen-50": "50vh",
         "screen-40": "40vh",
       },
+      margin: {
+        "30": "7.25rem",
+      },
       colors: {
         "dark-blue": "#112D4E", // Background color
         "light-blue": "#EAF2FA", // Background color

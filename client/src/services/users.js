@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseURL = "api/users";
+const baseURL = "/api/users";
 
 let token = null;
 
@@ -21,11 +21,10 @@ const update = async (id, updatedUser) => {
     const config = {
         headers: { Authorization: token },
     };
-    console.log("updatedUser", updatedUser);
-    console.log("config", config);
-    console.log("id", id);
-    const response = await axios.put(`${baseURL}/${id}`, updatedUser);//, config);
+
+    const response = await axios.put(`${baseURL}/${id}`, updatedUser, config);
     return response.data;
 };
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default { getUser, getUserByUsername, update, setToken };

@@ -1,41 +1,39 @@
 import React, { useState, useEffect } from "react";
 import userService from "../services/users";
+import zumbyService from "../services/zumbies";
 import defaultImage from "../utils/static/default.jpg";
 import { FcLikePlaceholder, FcLike } from "react-icons/fc";
 import { BiComment } from "react-icons/bi";
 
-export default function ZumbyCard({ zumby, isLogged, loggedUser, token }) {
-  const [user, setUser] = useState({});
+export default function ZumbyCard({ zumby, loggedUser }) {
   const [liked, setLiked] = useState(false);
 
+
   useEffect(() => {
-    userService.getUser(zumby.user).then((response) => {
-      setUser(response);
-    });
-  }, [zumby.user]);
+    if (loggedUser) {
+      zumby.likes.filter((like) => like === loggedUser.id).length > 0
+        ? setLiked(true)
+        : setLiked(false);
+    } 
+  }, [loggedUser, zumby.likes]);
 
   function handleClick() {
-    userService.getUserByUsername(loggedUser).then((response) => {
-      const currentUser = response;
-      if (liked) {
-        console.log("unlike");
-        currentUser.likes = currentUser.likes.filter((like) => like !== zumby.id);
-        console.log(currentUser.likes);
-      } else {
-        console.log("like");
-        currentUser.likes = [...currentUser.likes, zumby._id];
-        console.log(currentUser.likes);
-      }
-      userService.setToken(token);
-      console.log(token);
-      userService.update(currentUser.id, currentUser);
-      setLiked(!liked);
-    });
+    if (liked) {
+      loggedUser.likes = loggedUser.likes.filter((like) => like !== zumby.id);
+      zumby.likes = zumby.likes.filter((like) => like !== loggedUser.id);
+    } else {
+      loggedUser.likes = [...loggedUser.likes, zumby.id];
+      zumby.likes = [...zumby.likes, loggedUser.id];
+    }
+    userService.setToken(loggedUser.token);
+    userService.update(loggedUser.id, loggedUser);
+    zumbyService.update(zumby.id, zumby);
+    setLiked(!liked);
   }
 
-  const image = user.image || defaultImage;
+  const image = zumby.user.image || defaultImage;
 
-  if (user.private){
+  if (zumby.user.private){
     return <></>
   }else{
     return (
@@ -49,7 +47,7 @@ export default function ZumbyCard({ zumby, isLogged, loggedUser, token }) {
         </div>
         <div className="flex flex-col w-9/12">
           <div className="flex flex-row font-bold justify-between text-light-gray">
-            <div className="ml-2">{user.username}</div>
+            <div className="ml-2">{zumby.user.username}</div>
             <div className="mr-3">{parseDateTime(zumby.date)}</div>
           </div>
           <div className="flex flex-row font-bold h-full">
@@ -59,7 +57,7 @@ export default function ZumbyCard({ zumby, isLogged, loggedUser, token }) {
           </div>
           <div className="flex flex-row justify-around h-10 mb-1 text-lg">
             <BiComment className="text-gold" />
-            {isLogged ? (
+            {loggedUser ? (
               liked ? (
                 <button onClick={handleClick}>
                   <FcLike />
