@@ -61,6 +61,15 @@ usersRouter.get('/:id', async (request, response) => {
   }
 })
 
+usersRouter.get('/username/:username', async (request, response) => {
+  const user = await User.findOne({ username: request.params.username })
+  if (user) {
+    response.json(user)
+  } else {
+    response.status(404).end()
+  }
+})
+
 usersRouter.delete('/:id', async (request, response) => {
   const userToDelete = await User.findById(request.params.id)
   if (userToDelete) {
@@ -126,6 +135,14 @@ usersRouter.put('/:id', async (request, response) => {
       bio: body.bio || userToUpdate.bio,
       email: body.email || userToUpdate.email,
       image: body.image || userToUpdate.image,
+      //To review
+      likes: body.likes || userToUpdate.likes,//
+      followers: body.followers || userToUpdate.followers,//
+      following: body.following || userToUpdate.following,//
+      requests: body.requests || userToUpdate.requests,//
+      private: body.private || userToUpdate.private,//
+      verified: body.verified || userToUpdate.verified,//
+      zumbies: body.zumbies || userToUpdate.zumbies,//
       passwordHash: passwordHash || userToUpdate.passwordHash
     }
 
