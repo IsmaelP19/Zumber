@@ -77,7 +77,14 @@ export default function ZumbyCard({ zumby, loggedUser }) {
               </span>
             </div>
           ) : (
-            <></>
+            <div className="flex flex-row justify-around h-10 mb-1 text-lg">
+              <span className="text-light-gray font-bold flex flex-row items-center">
+                {comments}&nbsp;&nbsp;<div><AiOutlineMessage /></div>
+              </span>
+              <span className="text-light-gray font-bold flex flex-row items-center">
+                {likes}&nbsp;&nbsp;<div><FcLikePlaceholder /></div>
+              </span>
+            </div>
           )}
         </div>
       </div>
