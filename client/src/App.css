@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Establecer el color de la barra de desplazamiento */
+::-webkit-scrollbar-thumb {
+    background-color: #112D4E;
+    border: 1px solid #D6DADB;
+    border-radius: 50px;
+}
+
+/* Establecer el fondo de la barra de desplazamiento */
+::-webkit-scrollbar-track {
+    background-color: #EAF2FA;
+}
+
+/* Establecer el ancho de la barra de desplazamiento */
+::-webkit-scrollbar {
+    width: 13px;
+}

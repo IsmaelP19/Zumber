@@ -5,7 +5,7 @@ export default function Footer() {
   const year = today.getFullYear();
 
   return (
-    <footer className="bg-dark-blue text-light-gray text-center p-3 border-t border-gray-600 bottom-0 w-full">
+    <footer className="bg-dark-blue text-light-gray text-center p-3 border-t border-gray-600 w-full fixed md:relative bottom-0">
       <div className="container mx-auto flex justify-between items-center flex-col sm:flex-row">
         <div className="text-base mb-3 sm:mb-0">
           &copy; {year} Zumber, Inc.

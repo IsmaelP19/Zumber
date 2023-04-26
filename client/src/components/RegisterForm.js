@@ -137,7 +137,6 @@ export default function RegisterForm ({ setMessage }) {
         
       
       .catch(error => {
-        console.log(error)
         if (error.response.data.error.includes('expected `username` to be unique')) {
           showMessage('El nombre de usuario ya está en uso', 'error', setMessage, 4000)
         } else if (error.response.data.error.includes('expected `email` to be unique')) {

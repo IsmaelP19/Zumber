@@ -1,17 +1,16 @@
 {
   "version": "0.2.0",
   "configurations": [
+
     {
       "name": "Backend",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/app.js",
+      "program": "${workspaceFolder}/server/app.js",
       "cwd": "${workspaceFolder}",
-      "protocol": "inspector",
       "runtimeArgs": [
         "--inspect"
       ],
-      "port": 9229
     },
     {
       "name": "Frontend",
@@ -30,16 +29,12 @@
       "request": "launch",
       "program": "${workspaceFolder}/app.js",
       "cwd": "${workspaceFolder}",
-      "protocol": "inspector",
       "runtimeArgs": [
-        "--inspect"
-      ],
-      "port": 9229,
-      "runtimeExecutable": "npm",
-      "runtimeArgs": [
+        "--inspect",
         "run-script",
         "dev"
       ],
+      "runtimeExecutable": "npm",
       "console": "integratedTerminal"
     }
   ],
