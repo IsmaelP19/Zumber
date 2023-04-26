@@ -17,7 +17,6 @@ export default function Profile({ loggedUser }) {
   const [followers, setFollowers] = useState(null)
 
   useEffect(() => {
-    // if I am visiting my own profile, I already have my own information on loggedUser, there's no need of fetching it again
     const getUser = async () => {
       try {
         const user = await userService.getUserByUsername(username)
@@ -64,8 +63,8 @@ export default function Profile({ loggedUser }) {
       loggedUser.following = loggedUser.following.filter((following) => following !== user.id)
       setFollowers(followers - 1)
     } else {
-      user.followers = [...user.followers, loggedUser.id] // si lo hace
-      loggedUser.following = [...loggedUser.following, user.id] // esto no lo hace
+      user.followers = [...user.followers, loggedUser.id]
+      loggedUser.following = [...loggedUser.following, user.id]
       setFollowers(followers + 1)
     }
     setFollow(!follow)
@@ -83,7 +82,7 @@ export default function Profile({ loggedUser }) {
     </button>
 
   return isDone ? (
-    <div className="flex flex-col justify-center items-center mx-4 md:mx-0"> {/* if I put flex-col here the child goes crazy */}
+    <div className="flex flex-col justify-center items-center mx-2 md:mx-0"> 
       <div className="flex flex-col md:flex-row my-8 py-4 px-4 w-full mx-4 md:w-4/5 lg:w-2/3 lg:mx-0 bg-dark-blue text-white rounded-2xl">
         <div className="flex flex-col items-center gap-3 py-2 px-2 md:w-2/5 ">
           <img src={image} alt={user.username} className="h-32 w-32 md:h-52 md:w-52 object-cover rounded-full border-4 border-gold"></img>
@@ -103,10 +102,7 @@ export default function Profile({ loggedUser }) {
         </div>
       </div>
 
-      <div>
-        <ZumbiesContainer zumbies={zumbies} loggedUser={loggedUser}/>
-      </div>
-
+      <ZumbiesContainer zumbies={zumbies} loggedUser={loggedUser} />
     </div>
 
   ) : null

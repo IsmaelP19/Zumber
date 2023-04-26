@@ -16,7 +16,7 @@ export default function ZumbiesContainer({ zumbies, loggedUser }) {
   }
 
   return (
-    <div className="w-110">
+    <div className="w-full md:w-110">
       {zumbies.map((zumby) => {
         return (
           <ZumbyCard
