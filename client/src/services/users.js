@@ -12,9 +12,9 @@ const getUser = (id) => {
     return request.then((response) => response.data);
 };
 
-const getUserByUsername = (username) => {
-    const request = axios.get(`${baseURL}/username/${username}`);
-    return request.then((response) => response.data);
+const getUserByUsername = async (username) => {
+    const request = await axios.get(`${baseURL}/username/${username}`);
+    return request.data;
 };
 
 const update = async (id, updatedUser) => {
