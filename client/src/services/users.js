@@ -1,6 +1,6 @@
 import axios from "axios";
-const baseURL = "/api/users";
-
+const baseURL = '/api/users';
+// replace the baseUrl in the future for process.env.REACT_APP_BASE_URL + '/users'
 let token = null;
 
 const setToken = (newToken) => {
