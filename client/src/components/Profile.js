@@ -10,6 +10,7 @@ export default function Profile({ loggedUser }) {
   const { username } = useParams()
   const [isDone, setIsDone] = useState(false)
   const [user, setUser] = useState(null)
+  const [zumbies, setZumbies] = useState(null)
   const [image, setImage] = useState(defaultImage)
   const [isSame, setIsSame] = useState(false)
   const [follow, setFollow] = useState(false)
@@ -30,13 +31,23 @@ export default function Profile({ loggedUser }) {
         setIsDone(true)
       }
     }
+    const getZumbies = async () => {
+      try {
+        const zumbies = await userService.getUserZumbies(username)
+        setZumbies(zumbies)
+      } catch (error) {
+        console.error(error)
+      }
+    }
     if (loggedUser && loggedUser.username === username) {
+      getZumbies()
       setUser(loggedUser)
       if (loggedUser.image) setImage(loggedUser.image)
       setIsSame(true)
       setFollowers(loggedUser.followers.length)
       setIsDone(true)
     } else {
+      getZumbies()
       getUser()
     }
 
@@ -92,9 +103,9 @@ export default function Profile({ loggedUser }) {
         </div>
       </div>
 
-      {/* <div>
-        <ZumbiesContainer zumbies={user.zumbies} loggedUser={loggedUser}/>
-      </div> */}
+      <div>
+        <ZumbiesContainer zumbies={zumbies} loggedUser={loggedUser}/>
+      </div>
 
     </div>
 

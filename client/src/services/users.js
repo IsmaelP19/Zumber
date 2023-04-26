@@ -17,6 +17,11 @@ const getUserByUsername = async (username) => {
     return request.data;
 };
 
+const getUserZumbies = async (username) => {
+    const request = await axios.get(`${baseURL}/${username}/zumbies`);
+    return request.data;
+};
+
 const update = async (id, updatedUser) => {
     const config = {
         headers: { Authorization: token },
@@ -27,4 +32,4 @@ const update = async (id, updatedUser) => {
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getUser, getUserByUsername, update, setToken };
+export default { getUser, getUserByUsername, getUserZumbies, update, setToken };
