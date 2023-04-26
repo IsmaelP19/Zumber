@@ -230,7 +230,7 @@ export default function ProfileForm ({ setMessage, loggedUser }) {
     return (
       <div className="flex justify-center w-full">
         <form
-          className="flex flex-col items-center justify-center bg-dark-blue px-4 py-4 rounded-xl border-2 border-gray-600 shadow-xl mx-2 my-2 mb-32 md:mb-0"
+          className="flex flex-col items-center justify-center bg-dark-blue px-4 py-4 rounded-xl border-2 border-gray-600 shadow-xl mx-2 my-2 mb-32 md:mb-4"
           onSubmit={formik.handleSubmit}
         >
           <div className="flex flex-row items-center">
@@ -241,11 +241,11 @@ export default function ProfileForm ({ setMessage, loggedUser }) {
                 alt="Profile icon"
               />
             </div>
-            <div className="text-red-400">
-              <button onClick={deleteImage}>
+            {formik.values.image && <div className="text-red-400">
+              <button type="button" onClick={deleteImage}>
                 <ImCross />
               </button>
-            </div>
+            </div>}
           </div>
           <div className="flex flex-col lg:flex-row">
             <div className="flex flex-col mx-2 h-full justify-around">

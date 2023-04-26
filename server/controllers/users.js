@@ -130,17 +130,17 @@ usersRouter.put('/:id', async (request, response) => {
     }
 
     let user = {
-      username: body.username || userToUpdate.username,
-      name: body.name || userToUpdate.name,
-      surname: body.surname || userToUpdate.surname,
-      bio: body.bio || userToUpdate.bio,
-      email: body.email || userToUpdate.email,
-      image: body.image || userToUpdate.image,
-      likes: body.likes || userToUpdate.likes,
-      followers: body.followers || userToUpdate.followers,
-      following: body.following || userToUpdate.following,
-      verified: body.verified || userToUpdate.verified,
-      zumbies: body.zumbies || userToUpdate.zumbies,
+      username: body.username,
+      name: body.name,
+      surname: body.surname,
+      bio: body.bio,
+      email: body.email,
+      image: body.image,
+      likes: body.likes,
+      followers: body.followers,
+      following: body.following,
+      verified: body.verified,
+      zumbies: body.zumbies,
       passwordHash: passwordHash
     }
 
