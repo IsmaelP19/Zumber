@@ -1,15 +1,18 @@
 import { TbError404 } from 'react-icons/tb'
 import { HiOutlineEmojiSad } from 'react-icons/hi'
 import Button from './Button'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Error404() {
-
+  const [isDone, setIsDone] = useState(false)
   useEffect (() => {
     document.getElementById('main').classList.add('justify-center')
+    setIsDone(true)
   }, [])
 
-  // TODO: change styles
+  if (!isDone) {
+    return null;
+  }
   return (
     <div className="flex flex-col justify-center w-full px-7">
       <div className='flex w-full justify-center'>
