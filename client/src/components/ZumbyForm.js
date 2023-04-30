@@ -25,6 +25,8 @@ export default function ZumbyForm({ loggedUser, zumbies, setZumbies }) {
       const errors = {}
       if (!values.content) {
         errors.content = "No puedes crear un zumby vacío 🥸"
+      } else if(values.content.length > 140) {
+        errors.content = "Sólo se permiten 140 caracteres por zumby 🥲"
       }
       return errors
     }
@@ -58,8 +60,8 @@ export default function ZumbyForm({ loggedUser, zumbies, setZumbies }) {
               </div>
             ) : null
           }
-          <button type="submit" className="bg-gold text-dark-purple font-bold text-lg px-4 rounded active:bg-dark-purple active:text-gold active:border active:border-gold transition-all duration-200   ">
-            Zumby
+          <button type="submit" className="bg-gold text-dark-purple font-bold text-lg px-4 rounded active:bg-dark-purple active:text-gold active:border active:border-gold transition-all duration-200">
+            Zumbar
           </button>
         </form >
       </div >

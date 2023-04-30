@@ -74,22 +74,26 @@ export default function ZumbyCard({ zumby, loggedUser }) {
     return <></>
   }else{
     return (
-      <div className="bg-dark-blue h-36 my-2 mx-1 rounded-xl flex flex-row ">
+      <div className="bg-dark-blue my-2 mx-1 rounded-xl flex flex-row ">
         <div className="flex justify-center items-center w-3/12">
           <img
             src={image}
             alt="User profile icon"
-            className="rounded-full max-h-28 p-2"
+            className="rounded-full p-2 h-20 w-20 md:h-28 md:w-28"
           />
         </div>
         <div className="flex flex-col w-9/12">
           <div className="flex flex-row font-bold justify-between text-light-gray">
-            <div className="ml-2">{zumby_.user.username}</div>
+            <div className="ml-2" >
+              <a href={`/profile/${zumby_.user.username}`} className="cursor-pointer hover:underline">
+              {zumby_.user.username}
+              </a>
+            </div>
             <div className="mr-3">{parseDateTime(zumby_.date)}</div>
           </div>
           <div className="flex flex-row font-bold h-full">
             <div className="w-full items-center justify-center bg-light-blue mx-2 my-3 rounded-xl flex">
-              <div className="">{zumby_.content}</div>
+              <div className="p-2">{zumby_.content}</div>
             </div>
           </div>
           {loggedUser ? (
