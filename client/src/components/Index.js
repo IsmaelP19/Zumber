@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import zumbyService from "../services/zumbies";
 import ZumbiesContainer from "./ZumbiesContainer";
+import ZumbyForm from "./ZumbyForm";
 export default function Index({ loggedUser }) {
     
     const [zumbies, setZumbies] = useState([]);
@@ -12,9 +13,15 @@ export default function Index({ loggedUser }) {
     };
 
     useEffect(hook, []);
-    
+        
     return (
-      <div className="flex justify-center">
+      <div className="flex flex-col justify-center items-center">
+        {loggedUser ? (
+          <ZumbyForm loggedUser={loggedUser} zumbies={zumbies} setZumbies={setZumbies} />
+        ) : (
+          <></>
+        )}
+        
         <ZumbiesContainer
           zumbies={zumbies}
           loggedUser={loggedUser}
