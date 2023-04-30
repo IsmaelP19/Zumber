@@ -144,7 +144,11 @@ usersRouter.put('/:id', async (request, response) => {
       passwordHash: passwordHash
     }
 
-    const updatedUser = await User.findByIdAndUpdate(request.params.id, user, { new: true })
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: request.params.id },
+      user,
+      { new: true, runValidators: true, context: 'query' }
+    );
     response.json(updatedUser)
   } else {
     response.status(404).json({ error: 'user not found' })
