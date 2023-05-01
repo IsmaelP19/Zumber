@@ -6,59 +6,94 @@ import { FcLikePlaceholder, FcLike } from "react-icons/fc";
 import { AiOutlineMessage } from "react-icons/ai";
 
 export default function ZumbyCard({ zumby, loggedUser }) {
+
+  const [zumby_, setZumby_] = useState({
+    id: "",
+    user: {
+      id: "",
+      username: "",
+      image: ""
+    },
+    content: "",
+    likes: [],
+    comments: [],
+    date: "",
+  })
+
+  useEffect(() => {
+    if(zumby){
+      setZumby_({
+        id: zumby.id,
+        user: {
+          id: zumby.user.id,
+          username: zumby.user.username,
+          image: zumby.user.image
+        },
+        content: zumby.content,
+        likes: zumby.likes,
+        comments: zumby.comments,
+        date: zumby.date,
+      })
+    }
+  }, [zumby])
+
   const [liked, setLiked] = useState(false);
-  const [likes, setLikes] = useState(zumby.likes.length);
-  const [comments, setComments] = useState(zumby.comments.length);
+  const [likes, setLikes] = useState(zumby_.likes.length);
+  const [comments, setComments] = useState(zumby_.comments.length);
 
   useEffect(() => {
     if (loggedUser) {
-      zumby.likes.filter((like) => like === loggedUser.id).length > 0
+      zumby_.likes.filter((like) => like === loggedUser.id).length > 0
         ? setLiked(true)
         : setLiked(false);
     } 
-  }, [loggedUser, zumby.likes]);
+  }, [loggedUser, zumby_.likes]);
 
   useEffect(() => {
-    setLikes(zumby.likes.length);
-    setComments(zumby.comments.length);
-  }, [zumby.likes, zumby.comments]);
+    setLikes(zumby_.likes.length);
+    setComments(zumby_.comments.length);
+  }, [zumby_.likes, zumby_.comments]);
 
   function handleClick() {
     if (liked) {
-      loggedUser.likes = loggedUser.likes.filter((like) => like !== zumby.id);
-      zumby.likes = zumby.likes.filter((like) => like !== loggedUser.id);
+      loggedUser.likes = loggedUser.likes.filter((like) => like !== zumby_.id);
+      zumby_.likes = zumby_.likes.filter((like) => like !== loggedUser.id);
     } else {
-      loggedUser.likes = [...loggedUser.likes, zumby.id];
-      zumby.likes = [...zumby.likes, loggedUser.id];
+      loggedUser.likes = [...loggedUser.likes, zumby_.id];
+      zumby_.likes = [...zumby_.likes, loggedUser.id];
     }
     userService.setToken(loggedUser.token);
     userService.update(loggedUser.id, loggedUser);
-    zumbyService.update(zumby.id, zumby);
+    zumbyService.update(zumby_.id, zumby_);
     setLiked(!liked);
   }
 
-  const image = zumby.user.image || defaultImage;
+  const image = zumby_.user.image || defaultImage;
 
-  if (zumby.user.private){
+  if (zumby_.user.private){
     return <></>
   }else{
     return (
-      <div className="bg-dark-blue h-36 my-2 mx-1 rounded-xl flex flex-row ">
+      <div className="bg-dark-blue my-2 mx-1 rounded-xl flex flex-row ">
         <div className="flex justify-center items-center w-3/12">
           <img
             src={image}
             alt="User profile icon"
-            className="rounded-full max-h-28 p-2"
+            className="rounded-full p-2 h-20 w-20 md:h-28 md:w-28"
           />
         </div>
         <div className="flex flex-col w-9/12">
           <div className="flex flex-row font-bold justify-between text-light-gray">
-            <div className="ml-2">{zumby.user.username}</div>
-            <div className="mr-3">{parseDateTime(zumby.date)}</div>
+            <div className="ml-2" >
+              <a href={`/profile/${zumby_.user.username}`} className="cursor-pointer hover:underline">
+              {zumby_.user.username}
+              </a>
+            </div>
+            <div className="mr-3">{parseDateTime(zumby_.date)}</div>
           </div>
           <div className="flex flex-row font-bold h-full">
             <div className="w-full items-center justify-center bg-light-blue mx-2 my-3 rounded-xl flex">
-              <div className="">{zumby.content}</div>
+              <div className="p-2">{zumby_.content}</div>
             </div>
           </div>
           {loggedUser ? (
@@ -93,6 +128,9 @@ export default function ZumbyCard({ zumby, loggedUser }) {
 }
 
 function parseDateTime(datetime){
+
+  if (!datetime) return "";
+
   const date = new Date(datetime);
   const day = date.getDate();
   const month = date.getMonth() + 1;

@@ -70,6 +70,16 @@ usersRouter.get('/username/:username', async (request, response) => {
   }
 })
 
+usersRouter.get('/:username/zumbies', async (request, response) => {
+  const user = await User.findOne({ username: request.params.username })
+  if (user) {
+    const zumbies = await Zumby.find({ user: user._id }).populate('user', { username: 1, name: 1, surname: 1, image: 1 })
+    response.json(zumbies)
+  } else {
+    response.status(404).end()
+  }
+})
+
 usersRouter.delete('/:id', async (request, response) => {
   const userToDelete = await User.findById(request.params.id)
   if (userToDelete) {
@@ -151,6 +161,5 @@ usersRouter.put('/:id', async (request, response) => {
   }
 
 })
-
 
 module.exports = usersRouter

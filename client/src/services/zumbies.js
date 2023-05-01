@@ -11,4 +11,9 @@ const update = async (id, updatedZumby) => {
   return response.data;
 };
 
-export default { getAll, update };
+const create = async (newZumby) => {
+  const response = await axios.post(baseURL, newZumby);
+  return response.data;
+};
+
+export default { getAll, update, create };
