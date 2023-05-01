@@ -133,9 +133,10 @@ function parseDateTime(datetime){
 
   const date = new Date(datetime);
   const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
+  let month = date.getMonth() + 1;
+  let hours = date.getHours();
+  if (hours < 10) hours = "0" + hours;
+  let minutes = date.getMinutes();
+  if (minutes < 10) minutes = "0" + minutes;
   return `${day}/${month} - ${hours}:${minutes}`;
 }
