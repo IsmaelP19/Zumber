@@ -171,7 +171,7 @@ export default function ProfileForm ({ setMessage, loggedUser }) {
             4000
           );
           setTimeout(() => {
-            window.location.href = "/profile";
+            window.location.href = `/profile/${values.username}`;
           }, 4000);
         })
 
