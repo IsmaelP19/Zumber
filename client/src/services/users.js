@@ -1,6 +1,6 @@
 import axios from "axios";
-const baseURL = '/api/users';
-// replace the baseUrl in the future for process.env.REACT_APP_BASE_URL + '/users'
+const baseURL = process.env.REACT_APP_BASE_URL + '/users';
+
 let token = null;
 
 const setToken = (newToken) => {
@@ -22,6 +22,16 @@ const getUserZumbies = async (username) => {
     return request.data;
 };
 
+const getUserSavedZumbies = async (username) => {
+    const request = await axios.get(`${baseURL}/${username}/saved`);
+    return request.data;
+};
+
+const getUserFollowingZumbies = async (username) => {
+    const request = await axios.get(`${baseURL}/${username}/following`);
+    return request.data;
+};
+
 const update = async (id, updatedUser) => {
     const config = {
         headers: { Authorization: token },
@@ -32,4 +42,4 @@ const update = async (id, updatedUser) => {
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getUser, getUserByUsername, getUserZumbies, update, setToken };
+export default { getUser, getUserByUsername, getUserSavedZumbies, getUserZumbies, getUserFollowingZumbies, update, setToken };

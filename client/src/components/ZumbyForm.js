@@ -12,7 +12,7 @@ export default function ZumbyForm({ loggedUser, zumbies, setZumbies }) {
         let zumby = await zumbyService.create(values)
         resetForm()
         zumby.user = loggedUser
-        setZumbies(zumbies => [...zumbies, zumby])
+        setZumbies(zumbies => [zumby, ...zumbies])
       } catch (error) {
         console.error(error)
       }

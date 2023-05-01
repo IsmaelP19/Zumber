@@ -5,7 +5,7 @@ import defaultImage from "../utils/static/default.jpg";
 import { FcLikePlaceholder, FcLike } from "react-icons/fc";
 import { AiOutlineMessage } from "react-icons/ai";
 
-export default function ZumbyCard({ zumby, loggedUser }) {
+export default function ZumbyCard({ zumby, loggedUser, setSavedZumbies }) {
 
   const [zumby_, setZumby_] = useState({
     id: "",
@@ -58,6 +58,9 @@ export default function ZumbyCard({ zumby, loggedUser }) {
     if (liked) {
       loggedUser.likes = loggedUser.likes.filter((like) => like !== zumby_.id);
       zumby_.likes = zumby_.likes.filter((like) => like !== loggedUser.id);
+      if (setSavedZumbies){
+        setSavedZumbies((prev) => prev.filter((zumby) => zumby.id !== zumby_.id));
+      }
     } else {
       loggedUser.likes = [...loggedUser.likes, zumby_.id];
       zumby_.likes = [...zumby_.likes, loggedUser.id];

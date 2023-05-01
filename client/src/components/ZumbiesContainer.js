@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ZumbyCard from './ZumbyCard';
 
-export default function ZumbiesContainer({ zumbies, loggedUser }) {  
+export default function ZumbiesContainer({ zumbies, loggedUser, setSavedZumbies }) {  
 
   const [isDone, setIsDone] = useState(false)
 
@@ -23,6 +23,7 @@ export default function ZumbiesContainer({ zumbies, loggedUser }) {
             key={zumby.id}
             zumby={zumby}
             loggedUser = {loggedUser}
+            setSavedZumbies = {setSavedZumbies}
           />
         );
       })}
