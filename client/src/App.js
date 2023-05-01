@@ -7,6 +7,7 @@ import Notification from './components/Notification';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import Index from './components/Index';
+import ProfileForm from './components/ProfileForm';
 import Profile from './components/Profile';
 import Error404 from './components/Error404';
 import userService from './services/users';
@@ -52,6 +53,8 @@ export default function App() {
             <Route path="/" element={<Index isLogged={isLogged} loggedUser={user} />} />
             <Route path="/register" element={<RegisterForm setMessage={setMessage} />} />
             <Route path="/login" element={isLogged ? <Navigate to="/" /> : <LoginForm setMessage={setMessage} isLogged={isLogged} />} />
+            {/* <Route path="/profile/edit" element={isLogged ? <ProfileForm setMessage={setMessage} loggedUser={user} />: <Navigate to="/" />} /> */}
+            <Route path="/profile/edit" element={<ProfileForm setMessage={setMessage} loggedUser={user} />} />
             <Route path="/saved" element={<h1>This is a saved page</h1>} />
             <Route path="/profile/:username" element={<Profile loggedUser={user} />} />
             <Route path="*" element={<Error404 />} />
