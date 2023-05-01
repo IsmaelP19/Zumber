@@ -13,9 +13,6 @@ export default function ZumbyForm({ loggedUser, zumbies, setZumbies }) {
         resetForm()
         zumby.user = loggedUser
         setZumbies(zumbies => [...zumbies, zumby])
-
-
-
       } catch (error) {
         console.error(error)
       }
@@ -24,9 +21,9 @@ export default function ZumbyForm({ loggedUser, zumbies, setZumbies }) {
     validate: values => {
       const errors = {}
       if (!values.content) {
-        errors.content = "No puedes crear un zumby vacío 🥸"
+        errors.content = "No puedes crear un zumby vacío"
       } else if(values.content.length > 140) {
-        errors.content = "Sólo se permiten 140 caracteres por zumby 🥲"
+        errors.content = "Sólo se permiten 140 caracteres por zumby"
       }
       return errors
     }

@@ -162,36 +162,4 @@ usersRouter.put('/:id', async (request, response) => {
 
 })
 
-// usersRouter.put('/:id/follow', async (request, response) => {
-//   const body = request.body
-//   // en el body tiene el userId que va a seguir al usuario que está en el parámetro de la url
-
-//   const userToFollow = await User.findById(request.params.id) // el usuario que vamos a seguir
-//   const user = await User.findById(body.id) // el usuario que ha iniciado sesión y va a seguir al otro
-
-//   if (userToFollow && user) {
-//     if (userToFollow.followers.includes(user._id)) {
-//       // Remove the user from the followers of the user to follow
-//       userToFollow.followers = userToFollow.followers.filter(follower => follower.toString() !== user._id.toString())
-//       // Remove the user from the following of the user
-//       user.following = user.following.filter(following => following.toString() !== userToFollow._id.toString())
-//     } else {
-//       // Add the user to the followers of the user to follow
-//       userToFollow.followers = userToFollow.followers.concat(user._id)
-//       // Add the user to the following of the user
-//       user.following = user.following.concat(userToFollow._id)
-//     }
-
-//     await userToFollow.save()
-//     await user.save()
-
-//     response.json(userToFollow)
-//   } else if(!userToFollow) {
-//     response.status(404).json({ error: 'user to follow not found' })
-//   } else {
-//     response.status(404).json({ error: 'user not found' })
-//   }
-// })
-
-
 module.exports = usersRouter
