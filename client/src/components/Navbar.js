@@ -73,7 +73,7 @@ export default function Navbar({ user }) {
                 {
                   isOpenDropdown && (
                     <div className='absolute right-16 mt-2 py-2 w-40 bg-white rounded-md shadow-xl border-2 border-gray-600'>
-                      <a href='/profile' className='block px-4 py-2 text-sm text-gray-700 hover:bg-gold transition-all duration-200'>Perfil</a>
+                      <a href={`/profile/${user.username}`} className='block px-4 py-2 text-sm text-gray-700 hover:bg-gold transition-all duration-200'>Perfil</a>
                       <a href='/' onClick={() => { localStorage.removeItem('loggedUser') }} className='block px-4 py-2 text-sm text-gray-700 hover:bg-gold transition-all duration-200'>Cerrar sesión</a>
                     </div>
                   )
@@ -111,7 +111,7 @@ export default function Navbar({ user }) {
               }
               {user ? (
                 <>
-                  <a href='/profile'>
+                  <a href={`/profile/${user.username}`}>
                     <li className='text-center font-bold text-xl py-4 hover:bg-gold hover:text-gray-700 text-white'>
                       Perfil
                     </li>
