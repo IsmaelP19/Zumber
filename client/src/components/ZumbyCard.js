@@ -21,7 +21,8 @@ export default function ZumbyCard({ zumby, loggedUser }) {
   })
 
   useEffect(() => {
-    if(zumby){
+    if (zumby) {
+      console.log(zumby)
       setZumby_({
         id: zumby.id,
         user: {
@@ -46,7 +47,7 @@ export default function ZumbyCard({ zumby, loggedUser }) {
       zumby_.likes.filter((like) => like === loggedUser.id).length > 0
         ? setLiked(true)
         : setLiked(false);
-    } 
+    }
   }, [loggedUser, zumby_.likes]);
 
   useEffect(() => {
@@ -70,9 +71,11 @@ export default function ZumbyCard({ zumby, loggedUser }) {
 
   const image = zumby_.user.image || defaultImage;
 
-  if (zumby_.user.private){
+  const condition = window.location.pathname === "/" || window.location.pathname === "/saved" || window.location.pathname.includes("/profile")
+
+  if (zumby_.user.private) {
     return <></>
-  }else{
+  } else {
     return (
       <div className="bg-dark-blue my-2 mx-1 rounded-xl flex flex-row ">
         <div className="flex justify-center items-center w-3/12">
@@ -86,13 +89,19 @@ export default function ZumbyCard({ zumby, loggedUser }) {
           <div className="flex flex-row font-bold justify-between text-light-gray">
             <div className="ml-2" >
               <a href={`/profile/${zumby_.user.username}`} className="cursor-pointer hover:underline">
-              {zumby_.user.username}
+                {zumby_.user.username}
               </a>
             </div>
             <div className="mr-3">{parseDateTime(zumby_.date)}</div>
           </div>
           <div className="flex flex-row font-bold h-full">
-            <div className="w-full items-center justify-center bg-light-blue mx-2 my-3 rounded-xl flex">
+            <div className={`w-full items-center justify-center bg-light-blue mx-2 my-3 rounded-xl flex ${condition ? "cursor-pointer hover:bg-red-100 transition-all duration-300" : ""} `} 
+            onClick={() => {
+              if(condition) {
+                window.location.href = `/${zumby_.id}` 
+              }
+            }}
+            >
               <div className="p-2">{zumby_.content}</div>
             </div>
           </div>
@@ -127,7 +136,7 @@ export default function ZumbyCard({ zumby, loggedUser }) {
   }
 }
 
-function parseDateTime(datetime){
+function parseDateTime(datetime) {
 
   if (!datetime) return "";
 

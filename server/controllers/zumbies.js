@@ -30,12 +30,21 @@ zumbiesRouter.post('/', async (request, response) => {
 })
 
 zumbiesRouter.get('/', async (request, response) => {
-  const zumbies = await Zumby.find({}).populate('user', { username: 1, name: 1, image: 1, private: 1 }) 
+  const zumbies = await Zumby.find({}).populate('user', { username: 1, name: 1, image: 1 })
   response.json(zumbies.map((u) => u.toJSON()))
 })
 
 zumbiesRouter.get('/:id', async (request, response) => {
   const zumby = await Zumby.findById(request.params.id)
+    .populate('user', {username: 1,  name: 1, image: 1 })
+    .populate({
+      path: 'comments',
+      populate: {
+        path: 'user',
+        select: { username: 1, name: 1, image: 1 }
+      }
+    })
+
   if (zumby) {
     response.json(zumby.toJSON())
   } else {
@@ -80,6 +89,6 @@ zumbiesRouter.put('/:id', async (request, response) => {
     response.status(404).json({ error: 'zumby not found' })
   }
 })
-  
+
 
 module.exports = zumbiesRouter

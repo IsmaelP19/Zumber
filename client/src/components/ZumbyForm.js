@@ -1,6 +1,6 @@
 import { useFormik } from "formik"
 import zumbyService from "../services/zumbies"
-export default function ZumbyForm({ loggedUser, zumbies, setZumbies }) {
+export default function ZumbyForm({ loggedUser, zumbies, setZumbies, prevZumby }) {
 
   const formik = useFormik({
     initialValues: {
@@ -11,8 +11,26 @@ export default function ZumbyForm({ loggedUser, zumbies, setZumbies }) {
       try {
         let zumby = await zumbyService.create(values)
         resetForm()
-        zumby.user = loggedUser
-        setZumbies(zumbies => [...zumbies, zumby])
+
+        if (prevZumby) { // If prevZumby is passed, it means that the ZumbyForm is being used to create a comment
+          // we change the prevZumby object to add the new comment (only its id) to the comments array
+          // the comments array is an array of ids of the comments so we have to change the ...prevZumby.comments to get only the id of those comments we already have (not the whole comment object)
+          const comments = prevZumby.comments.map(comment => comment.id)
+          prevZumby.comments = [...comments, zumby.id]
+          zumbyService.update(prevZumby.id, prevZumby)
+          window.location.reload()
+        } else {
+          zumby.user = {
+            name: loggedUser.name,
+            username: loggedUser.username,
+            image: loggedUser.image,
+          }
+
+          // for some reason this doesn't work, the zumbies container will render again but all zumbies are ids and not objects so it will crash
+          setZumbies([...zumbies, zumby]) // not working on ZumbyDetails page 
+        } 
+
+
       } catch (error) {
         console.error(error)
       }
@@ -22,7 +40,7 @@ export default function ZumbyForm({ loggedUser, zumbies, setZumbies }) {
       const errors = {}
       if (!values.content) {
         errors.content = "No puedes crear un zumby vacío"
-      } else if(values.content.length > 140) {
+      } else if (values.content.length > 140) {
         errors.content = "Sólo se permiten 140 caracteres por zumby"
       }
       return errors

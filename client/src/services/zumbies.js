@@ -1,8 +1,13 @@
 import axios from "axios";
-const baseURL = "api/zumbies";
+const baseURL = "http://localhost:3003/api/zumbies";
 
 const getAll = () => {
   const request = axios.get(baseURL);
+  return request.then((response) => response.data);
+};
+
+const getZumby = (id) => {
+  const request = axios.get(`${baseURL}/${id}`);
   return request.then((response) => response.data);
 };
 
@@ -16,4 +21,4 @@ const create = async (newZumby) => {
   return response.data;
 };
 
-export default { getAll, update, create };
+export default { getAll, getZumby, update, create };

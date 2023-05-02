@@ -9,6 +9,7 @@ import Navbar from './components/Navbar';
 import Index from './components/Index';
 import Profile from './components/Profile';
 import Error404 from './components/Error404';
+import ZumbyDetails from './components/ZumbyDetails';
 import userService from './services/users';
 
 export default function App() {
@@ -54,6 +55,7 @@ export default function App() {
             <Route path="/login" element={isLogged ? <Navigate to="/" /> : <LoginForm setMessage={setMessage} isLogged={isLogged} />} />
             <Route path="/saved" element={<h1>This is a saved page</h1>} />
             <Route path="/profile/:username" element={<Profile loggedUser={user} />} />
+            <Route path="/:zumbyId" element={<ZumbyDetails loggedUser={user} />} />
             <Route path="*" element={<Error404 />} />
           </Routes>
         </BrowserRouter>
