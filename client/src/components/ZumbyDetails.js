@@ -15,6 +15,9 @@ export default function ZumbyDetails ({loggedUser}) {
     const hook = async () => {
       const zumby_ = await zumbiesService.getZumby(zumbyId);
       setZumby(zumby_);
+      zumby_.comments.sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
       setComments(zumby_.comments);
     }
     hook();
@@ -29,8 +32,8 @@ export default function ZumbyDetails ({loggedUser}) {
       <ZumbyCard zumby={zumby} loggedUser={loggedUser} />
       <ZumbyForm loggedUser={loggedUser} prevZumby={zumby} zumbies={comments} setZumbies={setComments}  />
 
-      {zumby.comments.length > 0 ? (
-        <ZumbiesContainer zumbies={zumby.comments} loggedUser={loggedUser} />
+      {comments.length > 0 ? (
+        <ZumbiesContainer zumbies={comments} loggedUser={loggedUser} />
       ) : (
         <></>
       )}

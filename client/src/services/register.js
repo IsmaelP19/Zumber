@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseURL = process.env.REACT_APP_BASE_URL + '/register'
+const baseURL = process.env.REACT_APP_BASE_URL + '/users'
 
 
 const register = async newObject => {

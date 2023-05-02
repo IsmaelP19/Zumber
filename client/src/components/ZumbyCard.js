@@ -22,7 +22,6 @@ export default function ZumbyCard({ zumby, loggedUser }) {
 
   useEffect(() => {
     if (zumby) {
-      console.log(zumby)
       setZumby_({
         id: zumby.id,
         user: {
