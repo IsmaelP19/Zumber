@@ -64,6 +64,11 @@ zumbiesRouter.delete('/:id', async (request, response) => {
   const zumbyToDelete = await Zumby.findById(request.params.id)
   if(zumbyToDelete) {
     if (zumbyToDelete.user.toString() === decodedToken.id.toString()) {
+      const usersThatLiked = await User.find({ likes: zumbyToDelete._id })
+      usersThatLiked.forEach(async (user) => {
+        user.likes = user.likes.filter(z => z.toString() !== zumbyToDelete._id.toString())
+        await user.save()
+      })
       const userToDeleteZumby = await User.findById(zumbyToDelete.user)
       userToDeleteZumby.zumbies = userToDeleteZumby.zumbies.filter(z => z.toString() !== zumbyToDelete._id.toString())
       await userToDeleteZumby.save()
@@ -76,19 +81,6 @@ zumbiesRouter.delete('/:id', async (request, response) => {
   } else {
     response.status(404).json({ error: 'zumby not found' })
   }
-
-
-
-  // const zumbyToDelete = await Zumby.findById(request.params.id)
-  // if (zumbyToDelete) {
-  //   const userToDeleteZumby = await User.findById(zumbyToDelete.user)
-  //   userToDeleteZumby.zumbies = userToDeleteZumby.zumbies.filter(z => z.toString() !== zumbyToDelete._id.toString())
-  //   await userToDeleteZumby.save()
-  //   await zumbyToDelete.remove()
-  //   response.status(204).end()
-  // } else {
-  //   response.status(404).json({ error: 'zumby not found' })
-  // }
 })
 
 zumbiesRouter.put('/:id', async (request, response) => {
