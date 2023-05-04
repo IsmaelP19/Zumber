@@ -40,17 +40,17 @@ export default function App() {
   if (!isDone) {
     return null;
   }
-
+  
   return (
     <div className="App flex flex-col min-h-screen">
       <Navbar user={user} />
       <div className='bg-light-blue border-0 border-none'>
-        <Notification message={message[0]} type={message[1]} />
+        <Notification message={message[0]} type={message[1]}  />
       </div>
       <div className={`flex-1 flex flex-col bg-light-blue ${style}`} id='main'>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index isLogged={isLogged} loggedUser={user} />} />
+            <Route path="/" element={<Index isLogged={isLogged} loggedUser={user} setMessage={setMessage} />} />
             <Route path="/register" element={<RegisterForm setMessage={setMessage} />} />
             <Route path="/login" element={isLogged ? <Navigate to="/" /> : <LoginForm setMessage={setMessage} isLogged={isLogged} />} />
             <Route path="/saved" element={<h1>This is a saved page</h1>} />

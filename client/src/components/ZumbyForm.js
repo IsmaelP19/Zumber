@@ -18,17 +18,15 @@ export default function ZumbyForm({ loggedUser, zumbies, setZumbies, prevZumby }
           const comments = prevZumby.comments.map(comment => comment.id)
           prevZumby.comments = [...comments, zumby.id]
           zumbyService.update(prevZumby.id, prevZumby)
-          setZumbies([zumby, ...zumbies])
-        } else {
-          zumby.user = {
-            name: loggedUser.name,
-            username: loggedUser.username,
-            image: loggedUser.image,
-          }
+          // setZumbies([zumby, ...zumbies])
+        // } else {
 
           // for some reason this doesn't work, the zumbies container will render again but all zumbies are ids and not objects so it will crash
-          setZumbies([zumby, ...zumbies]) // not working on ZumbyDetails page 
-        } 
+        }
+        zumby.user = loggedUser
+
+        setZumbies([zumby, ...zumbies]) // not working on ZumbyDetails page 
+
 
 
       } catch (error) {

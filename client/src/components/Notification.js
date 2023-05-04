@@ -2,7 +2,7 @@ export default function Notification ({ message, type }) {
   if (message === null || message === '' || message === undefined) {
     return null
   }
-
+  
   let style
 
   if (type === 'success') {

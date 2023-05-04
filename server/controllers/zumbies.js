@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 const Zumby = require('../models/zumby')
 const User = require('../models/user')
 const zumbiesRouter = require('express').Router()
@@ -52,17 +53,42 @@ zumbiesRouter.get('/:id', async (request, response) => {
   }
 })
 
-zumbiesRouter.delete('/:id', async (request, response) => {
+zumbiesRouter.delete('/:id', async (request, response) => { 
+
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+  if (!request.token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+
   const zumbyToDelete = await Zumby.findById(request.params.id)
-  if (zumbyToDelete) {
-    const userToDeleteZumby = await User.findById(zumbyToDelete.user)
-    userToDeleteZumby.zumbies = userToDeleteZumby.zumbies.filter(z => z.toString() !== zumbyToDelete._id.toString())
-    await userToDeleteZumby.save()
-    await zumbyToDelete.remove()
-    response.status(204).end()
+  if(zumbyToDelete) {
+    if (zumbyToDelete.user.toString() === decodedToken.id.toString()) {
+      const userToDeleteZumby = await User.findById(zumbyToDelete.user)
+      userToDeleteZumby.zumbies = userToDeleteZumby.zumbies.filter(z => z.toString() !== zumbyToDelete._id.toString())
+      await userToDeleteZumby.save()
+      await zumbyToDelete.remove()
+      response.status(204).end()
+      
+    } else {
+      response.status(401).json({ error: 'unauthorized' })
+    }
   } else {
     response.status(404).json({ error: 'zumby not found' })
   }
+
+
+
+  // const zumbyToDelete = await Zumby.findById(request.params.id)
+  // if (zumbyToDelete) {
+  //   const userToDeleteZumby = await User.findById(zumbyToDelete.user)
+  //   userToDeleteZumby.zumbies = userToDeleteZumby.zumbies.filter(z => z.toString() !== zumbyToDelete._id.toString())
+  //   await userToDeleteZumby.save()
+  //   await zumbyToDelete.remove()
+  //   response.status(204).end()
+  // } else {
+  //   response.status(404).json({ error: 'zumby not found' })
+  // }
 })
 
 zumbiesRouter.put('/:id', async (request, response) => {
