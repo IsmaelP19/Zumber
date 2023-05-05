@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 export default function Error404() {
 
   useEffect(() => {
-    document.title = "Zumber | 404";
+    document.title = "Zumber | Página no encontrada";
   }, []);
 
   const [isDone, setIsDone] = useState(false)

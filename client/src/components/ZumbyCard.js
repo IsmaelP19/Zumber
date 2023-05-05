@@ -6,7 +6,7 @@ import { FcLikePlaceholder, FcLike } from "react-icons/fc";
 import { AiOutlineMessage } from "react-icons/ai";
 import { HiOutlineTrash } from "react-icons/hi";
 
-export default function ZumbyCard({ zumby, loggedUser, commentsState, condition, setSavedZumbies, main }) {
+export default function ZumbyCard({ zumby, loggedUser, setLoggedUser, commentsState, condition, setSavedZumbies, main }) {
 
   const [zumby_, setZumby_] = useState({
     id: "",
@@ -69,7 +69,8 @@ export default function ZumbyCard({ zumby, loggedUser, commentsState, condition,
       zumby_.likes = [...zumby_.likes, loggedUser.id];
     }
     userService.setToken(loggedUser.token);
-    userService.update(loggedUser.id, loggedUser);
+    userService.update(loggedUser.id, loggedUser); 
+    setLoggedUser(loggedUser); // to update the state of the logged user in App.js
     zumbyService.update(zumby_.id, zumby_);
     setLiked(!liked);
   }
@@ -77,7 +78,7 @@ export default function ZumbyCard({ zumby, loggedUser, commentsState, condition,
   async function handleDelete() {
     if (window.confirm("¿De verdad deseas eliminar este zumby?")) {
       await zumbyService.setToken(loggedUser.token);
-      
+
       await userService.setToken(loggedUser.token);
       loggedUser.zumbies = loggedUser.zumbies.filter((zumby) => zumby !== zumby_.id);
       zumby_.likes.forEach(async (like) => {
@@ -96,11 +97,16 @@ export default function ZumbyCard({ zumby, loggedUser, commentsState, condition,
 
       await zumbyService.remove(zumby_.id);
 
-      userService.update(loggedUser.id, loggedUser);
+      await userService.update(loggedUser.id, loggedUser);
 
       const message = ['Zumby eliminado correctamente', 'success']
-      localStorage.setItem('message', JSON.stringify(message))
-      window.location.href = "/";
+      window.localStorage.setItem('message', JSON.stringify(message))
+
+      if (window.location.pathname.includes('profile')) {
+        window.location.reload()
+      } else {
+        window.location.href = '/'
+      }
 
     }
   }
@@ -156,16 +162,16 @@ export default function ZumbyCard({ zumby, loggedUser, commentsState, condition,
                   {liked ? <FcLike /> : <FcLikePlaceholder />}
                 </button>
               </span>
-              { main &&
+              {main &&
                 loggedUser.id === zumby_.user.id ? (
-                  <span className="flex items-center text-light-gray font-bold">
-                    <button onClick={handleDelete}>
-                      <HiOutlineTrash />
-                    </button>
-                  </span>
-                ) : (
-                  <></>
-                )
+                <span className="flex items-center text-light-gray font-bold">
+                  <button onClick={handleDelete}>
+                    <HiOutlineTrash />
+                  </button>
+                </span>
+              ) : (
+                <></>
+              )
 
               }
             </div>

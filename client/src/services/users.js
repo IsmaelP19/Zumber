@@ -1,6 +1,5 @@
 import axios from "axios";
-// const baseURL = process.env.REACT_APP_BASE_URL + '/users';
-const baseURL = 'http://localhost:3003/api/users'
+const baseURL = process.env.REACT_APP_BASE_URL + '/users'
 
 
 let token = null;

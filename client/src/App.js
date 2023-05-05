@@ -54,14 +54,14 @@ export default function App() {
       <div className={`flex-1 flex flex-col bg-light-blue ${style}`} id='main'>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index loggedUser={user} setMessage={setMessage} />} />
+            <Route path="/" element={<Index loggedUser={user} setMessage={setMessage} setLoggedUser={setUser} />} />
             <Route path="/register" element={<RegisterForm setMessage={setMessage} />} />
             <Route path="/login" element={isLogged ? <Navigate to="/" /> : <LoginForm setMessage={setMessage} isLogged={isLogged} />} />
-            <Route path="/saved" element={isLogged ? <SavedZumbies loggedUser={user} /> : <Navigate to="/login" />} />
+            <Route path="/saved" element={isLogged ? <SavedZumbies loggedUser={user} setLoggedUser={setUser} /> : <Navigate to="/login" />} />
             <Route path="/profile/edit" element={isLogged ? <ProfileForm setMessage={setMessage} loggedUser={user} />: <Navigate to="/login" />} />
-            <Route path="/following" element={isLogged ? <FollowingUsers loggedUser={user} /> : <Navigate to="/login" />} />
-            <Route path="/profile/:username" element={isLogged ? <Profile loggedUser={user} /> : <Navigate to="/login" />} />
-            <Route path="/:zumbyId" element={<ZumbyDetails loggedUser={user} />} />
+            <Route path="/following" element={isLogged ? <FollowingUsers loggedUser={user} setLoggedUser={setUser} /> : <Navigate to="/login" />} />
+            <Route path="/profile/:username" element={isLogged ? <Profile loggedUser={user} setLoggedUser={setUser} setMessage={setMessage} /> : <Navigate to="/login" />} />
+            <Route path="/:zumbyId" element={<ZumbyDetails loggedUser={user} setLoggedUser={setUser} />} />
             <Route path="*" element={<Error404 />} />
           </Routes>
         </BrowserRouter>
