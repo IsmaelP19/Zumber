@@ -97,9 +97,10 @@ usersRouter.get('/:username/following', async (request, response) => {
     const following = user.following
     for (const user of following) {
       const followedUser = await User.findById(user).populate('zumbies', { content: 1, date: 1, comments: 1, likes: 1 })
-      const zumbiesFromUser = await Zumby.find({ user: followedUser.id }).populate('user', { username: 1, name: 1, surname: 1, image: 1 }).sort({ date: -1 })
+      const zumbiesFromUser = await Zumby.find({ user: followedUser.id }).populate('user', { username: 1, name: 1, surname: 1, image: 1 })
       zumbies = zumbies.concat(zumbiesFromUser)
     }
+    zumbies.sort((a, b) => b.date - a.date)
     response.json(zumbies)
   } else {
     response.status(404).end()
