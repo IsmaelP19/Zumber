@@ -173,7 +173,6 @@ usersRouter.put('/:id', async (request, response) => {
       likes: body.likes,
       followers: body.followers,
       following: body.following,
-      verified: body.verified,
       zumbies: body.zumbies,
       passwordHash: passwordHash
     }

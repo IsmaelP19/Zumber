@@ -35,4 +35,5 @@ const remove = async (id) => {
   return response.data;
 };
 
+
 export default { setToken, getAll, getZumby, update, create, remove };

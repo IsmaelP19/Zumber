@@ -42,5 +42,4 @@ const update = async (id, updatedUser) => {
     return response.data;
 };
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default { getUser, getUserByUsername, getUserSavedZumbies, getUserZumbies, getUserFollowingZumbies, update, setToken };

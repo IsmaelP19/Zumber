@@ -1,7 +1,6 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useLocation } from 'react-router';
 import RegisterForm from './components/RegisterForm';
 import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
