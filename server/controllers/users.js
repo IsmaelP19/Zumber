@@ -73,8 +73,33 @@ usersRouter.get('/username/:username', async (request, response) => {
 usersRouter.get('/:username/zumbies', async (request, response) => {
   const user = await User.findOne({ username: request.params.username })
   if (user) {
-    const zumbies = await Zumby.find({ user: user._id }).populate('user', { username: 1, name: 1, surname: 1, image: 1 })
+    const zumbies = await Zumby.find({ user: user._id }).populate('user', { username: 1, name: 1, surname: 1, image: 1 }).sort({ date: -1 })
     response.json(zumbies)
+  } else {
+    response.status(404).end()
+  }
+})
+
+usersRouter.get('/:username/saved', async (request, response) => {
+  const user = await User.findOne({ username: request.params.username })
+  if (user) {
+    const zumbies = await Zumby.find({ _id: { $in: user.likes } }).populate('user', { username: 1, name: 1, surname: 1, image: 1 }).sort({ date: -1 })
+    response.json(zumbies)
+  } else {
+    response.status(404).end()
+  }
+})
+
+usersRouter.get('/:username/following', async (request, response) => {
+  const user = await User.findOne({ username: request.params.username })
+  if (user) {
+    const following = await User.find({ _id: { $in: user.following } })
+    let zumbies = []
+    following.forEach(async (user) => {
+      const zumbiesFromUser = await Zumby.find({ user: user._id }).populate('user', { username: 1, name: 1, surname: 1, image: 1 }).sort({ date: -1 })
+      zumbies = zumbies.concat(zumbiesFromUser)
+      response.json(zumbies)
+    })
   } else {
     response.status(404).end()
   }

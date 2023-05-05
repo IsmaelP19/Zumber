@@ -11,6 +11,10 @@ export default function Navbar({ user }) {
       href: '/'
     },
     {
+      name: 'Siguiendo',
+      href: '/following'
+    },
+    {
       name: 'Guardados',
       href: '/saved'
     }
