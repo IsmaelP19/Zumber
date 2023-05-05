@@ -1,25 +1,37 @@
 import { useFormik } from "formik"
 import zumbyService from "../services/zumbies"
-export default function ZumbyForm({ loggedUser, zumbies, setZumbies, prevZumby }) {
+export default function ZumbyForm({ loggedUser, zumbies, setZumbies, prevZumby, setPrevZumby, setLoggedUser }) {
 
   const formik = useFormik({
     initialValues: {
       content: "",
-      user: loggedUser.id
+      user: loggedUser.id,
+      commented: prevZumby ? prevZumby.id : null
     },
     onSubmit: async (values, { resetForm }) => {
       try {
         let zumby = await zumbyService.create(values)
+        setLoggedUser((loggedUser) => {
+          loggedUser.zumbies = [...loggedUser.zumbies, zumby.id]
+          return loggedUser
+        })
+
         resetForm()
 
         if (prevZumby) { 
-          const comments = prevZumby.comments.map(comment => comment.id)
+          let comments
+          if(typeof prevZumby.comments[0] !== "string"){
+            comments = prevZumby.comments = prevZumby.comments.map(comment => comment.id)
+          } else {
+            comments = prevZumby.comments
+          }
           prevZumby.comments = [...comments, zumby.id]
           zumbyService.update(prevZumby.id, prevZumby)
-
+          setPrevZumby(prevZumby)
         }
         zumby.user = loggedUser
         setZumbies(zumbies => [zumby, ...zumbies])
+        
       } catch (error) {
         console.error(error)
       }
@@ -54,7 +66,7 @@ export default function ZumbyForm({ loggedUser, zumbies, setZumbies, prevZumby }
             onBlur={formik.handleBlur}
             className="w-11/12 h-auto bg-light-gray text-black text-xl px-4 py-2 rounded-xl resize-none overflow-y-hidden"
             id="zumby-textarea"
-            placeholder="¿Qué quieres zumbar?"
+            placeholder="¿Qué quieres publicar?"
           >
           </textarea>
           {
@@ -65,7 +77,7 @@ export default function ZumbyForm({ loggedUser, zumbies, setZumbies, prevZumby }
             ) : null
           }
           <button type="submit" className="bg-gold text-dark-purple font-bold text-lg px-4 rounded active:bg-dark-purple active:text-gold active:border active:border-gold transition-all duration-200">
-            Zumbar
+            Publicar
           </button>
         </form >
       </div >

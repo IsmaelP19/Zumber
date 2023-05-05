@@ -6,6 +6,6 @@ Content-Type: application/json
   "name": "Ismael",
   "surname": "Pérez Ortiz",
   "password": "s1st3m4s",
-  "email": "readerofpanem@gmail.com",
+  "email": "ismperort@us.es",
   "bio": "This is just a test"
 }

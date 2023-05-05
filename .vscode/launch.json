@@ -1,51 +1,31 @@
 {
   "version": "0.2.0",
   "configurations": [
-
     {
-      "name": "Backend",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/server/app.js",
-      "cwd": "${workspaceFolder}",
-      "runtimeArgs": [
-        "--inspect"
-      ],
+      "name": "Servidor MERN",
+      "program": "${workspaceFolder}/server/index.js",
+      "envFile": "${workspaceFolder}/server/.env",
+      "env": {
+        "NODE_ENV": "development"
+      }
     },
     {
-      "name": "Frontend",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:3000/",
+      "name": "Cliente MERN",
+      "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}/client/src",
-      "sourceMapPathOverrides": {
-        "webpack:///src/": "${webRoot}/"
-      },
-      "sourceMaps": true
+      "runtimeExecutable": "stable",
     },
-    {
-      "name": "Backend & Frontend",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/app.js",
-      "cwd": "${workspaceFolder}",
-      "runtimeArgs": [
-        "--inspect",
-        "run-script",
-        "dev"
-      ],
-      "runtimeExecutable": "npm",
-      "console": "integratedTerminal"
-    }
   ],
   "compounds": [
     {
-      "name": "Debug All",
+      "name": "Servidor y cliente MERN",
       "configurations": [
-        "Backend",
-        "Frontend",
-        "Backend & Frontend"
-      ]
+        "Servidor MERN",
+        "Cliente MERN"]
     }
   ]
 }

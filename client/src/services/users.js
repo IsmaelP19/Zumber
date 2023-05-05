@@ -1,6 +1,5 @@
 import axios from "axios";
-// const baseURL = process.env.REACT_APP_BASE_URL + '/users';
-const baseURL = 'http://localhost:3003/api/users'
+const baseURL = process.env.REACT_APP_BASE_URL + '/users'
 
 
 let token = null;
@@ -43,5 +42,4 @@ const update = async (id, updatedUser) => {
     return response.data;
 };
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default { getUser, getUserByUsername, getUserSavedZumbies, getUserZumbies, getUserFollowingZumbies, update, setToken };

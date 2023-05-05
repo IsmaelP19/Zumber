@@ -51,11 +51,7 @@ const userSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Zumby'
     }
-  ],
-  verified: {
-    type: Boolean,
-    default: false
-  }
+  ]
   
 })
 
@@ -63,7 +59,7 @@ userSchema.plugin(uniqueValidator)
 
 userSchema.set('toJSON', {
   transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id // .toString()
+    returnedObject.id = returnedObject._id
     delete returnedObject._id
     delete returnedObject.__v
     delete returnedObject.passwordHash

@@ -21,6 +21,11 @@ const validate = (values) => {
 
 
 export default function LoginForm ({ setMessage, isLogged }) {
+
+  useEffect(() => {
+    document.title = "Zumber | Inicio de sesión";
+  }, []);
+
   const [isDone, setIsDone] = useState(false)
 
   useEffect(() => {
@@ -39,16 +44,16 @@ export default function LoginForm ({ setMessage, isLogged }) {
     onSubmit: async(values) => {
       try {
         const user = await loginService.login(values)
-        showMessage(`Bienvenido, ${user.username}`, 'success', setMessage, 4000)
+        showMessage(`Bienvenido, ${user.username}`, 'success', setMessage, 3000)
         window.localStorage.setItem('loggedUser', JSON.stringify(user))
         setTimeout(() => {
           window.location.href = '/'
-        }, 4000)
+        }, 3000)
       } catch (error) {
         if(error.response.data.error.includes('invalid username or password')) {
-          showMessage('Nombre de usuario o contraseña incorrectos', 'error', setMessage, 5000)
+          showMessage('Nombre de usuario o contraseña incorrectos', 'error', setMessage, 4000)
         } else {
-          showMessage('Ha ocurrido un error. Por favor, prueba más tarde ⌛', 'error', setMessage, 5000)
+          showMessage('Ha ocurrido un error. Por favor, prueba más tarde ⌛', 'error', setMessage, 4000)
         }
       }
     },

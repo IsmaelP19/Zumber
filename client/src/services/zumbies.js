@@ -1,6 +1,5 @@
 import axios from "axios";
-// const baseURL = process.env.REACT_APP_BASE_URL + "/zumbies";
-const baseURL = "http://localhost:3003/http://localhost:3003/api/zumbies";
+const baseURL = process.env.REACT_APP_BASE_URL + "/zumbies"
 
 let token = null;
 
@@ -35,5 +34,6 @@ const remove = async (id) => {
   const response = await axios.delete(`${baseURL}/${id}`, config);
   return response.data;
 };
+
 
 export default { setToken, getAll, getZumby, update, create, remove };

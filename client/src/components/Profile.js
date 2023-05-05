@@ -5,8 +5,14 @@ import userService from "../services/users"
 import defaultImage from "../utils/static/default.jpg"
 import Button from "./Button"
 import ZumbiesContainer from "./ZumbiesContainer"
+import { showMessage } from "../utils/utils"
 
-export default function Profile({ loggedUser }) {
+export default function Profile({ loggedUser, setLoggedUser, setMessage }) {
+
+  useEffect(() => {
+    document.title = "Zumber | Perfil";
+  }, []);
+
   const { username } = useParams()
   const [isDone, setIsDone] = useState(false)
   const [user, setUser] = useState(null)
@@ -49,8 +55,12 @@ export default function Profile({ loggedUser }) {
       getZumbies()
       getUser()
     }
-
-  }, [username, loggedUser])
+    const message = JSON.parse(localStorage.getItem('message'));
+    if (message) {
+      showMessage(message[0], message[1], setMessage, 3000)
+      localStorage.removeItem('message');
+    }
+  }, [username, loggedUser, setMessage])
 
   if (isDone && !user) {
     return <Error404 />
@@ -102,7 +112,7 @@ export default function Profile({ loggedUser }) {
         </div>
       </div>
 
-      <ZumbiesContainer zumbies={zumbies} loggedUser={loggedUser} />
+      <ZumbiesContainer zumbies={zumbies} loggedUser={loggedUser} main={true} setMessage={setMessage} setLoggedUser={setLoggedUser}  />
     </div>
 
   ) : null

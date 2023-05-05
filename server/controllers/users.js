@@ -12,7 +12,7 @@ usersRouter.post('/', async (request, response) => {
 
   if (!body.email) {
     return response.status(400).json({ error: 'User validation failed: email: Path `email` is required.' })
-  }else if (!emailRegex.test(body.email)) {
+  } else if (!emailRegex.test(body.email)) {
     return response.status(400).json({ error: 'invalid email' })
   } else if (body.username.length < 3) {
     return response.status(400).json({ error: 'username is too short' })
@@ -93,13 +93,15 @@ usersRouter.get('/:username/saved', async (request, response) => {
 usersRouter.get('/:username/following', async (request, response) => {
   const user = await User.findOne({ username: request.params.username })
   if (user) {
-    const following = await User.find({ _id: { $in: user.following } })
     let zumbies = []
-    following.forEach(async (user) => {
-      const zumbiesFromUser = await Zumby.find({ user: user._id }).populate('user', { username: 1, name: 1, surname: 1, image: 1 }).sort({ date: -1 })
+    const following = user.following
+    for (const user of following) {
+      const followedUser = await User.findById(user).populate('zumbies', { content: 1, date: 1, comments: 1, likes: 1 })
+      const zumbiesFromUser = await Zumby.find({ user: followedUser.id }).populate('user', { username: 1, name: 1, surname: 1, image: 1 })
       zumbies = zumbies.concat(zumbiesFromUser)
-      response.json(zumbies)
-    })
+    }
+    zumbies.sort((a, b) => b.date - a.date)
+    response.json(zumbies)
   } else {
     response.status(404).end()
   }
@@ -146,9 +148,6 @@ usersRouter.put('/:id', async (request, response) => {
     return response.status(400).json({ error: "bio is too long" });
   }
 
-  // The next lines should be uncommented when we have the frontend working
-  // It is not working now because if we try to login within the rest file, the token is generated different each time
-  // and we cannot use it to update the user. We will use localStorage to store the token on cache.
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
   if (!request.token || !decodedToken.id) {
@@ -174,7 +173,6 @@ usersRouter.put('/:id', async (request, response) => {
       likes: body.likes,
       followers: body.followers,
       following: body.following,
-      verified: body.verified,
       zumbies: body.zumbies,
       passwordHash: passwordHash
     }
