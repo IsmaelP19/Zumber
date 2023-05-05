@@ -73,8 +73,33 @@ usersRouter.get('/username/:username', async (request, response) => {
 usersRouter.get('/:username/zumbies', async (request, response) => {
   const user = await User.findOne({ username: request.params.username })
   if (user) {
-    const zumbies = await Zumby.find({ user: user._id }).populate('user', { username: 1, name: 1, surname: 1, image: 1 })
+    const zumbies = await Zumby.find({ user: user._id }).populate('user', { username: 1, name: 1, surname: 1, image: 1 }).sort({ date: -1 })
     response.json(zumbies)
+  } else {
+    response.status(404).end()
+  }
+})
+
+usersRouter.get('/:username/saved', async (request, response) => {
+  const user = await User.findOne({ username: request.params.username })
+  if (user) {
+    const zumbies = await Zumby.find({ _id: { $in: user.likes } }).populate('user', { username: 1, name: 1, surname: 1, image: 1 }).sort({ date: -1 })
+    response.json(zumbies)
+  } else {
+    response.status(404).end()
+  }
+})
+
+usersRouter.get('/:username/following', async (request, response) => {
+  const user = await User.findOne({ username: request.params.username })
+  if (user) {
+    const following = await User.find({ _id: { $in: user.following } })
+    let zumbies = []
+    following.forEach(async (user) => {
+      const zumbiesFromUser = await Zumby.find({ user: user._id }).populate('user', { username: 1, name: 1, surname: 1, image: 1 }).sort({ date: -1 })
+      zumbies = zumbies.concat(zumbiesFromUser)
+      response.json(zumbies)
+    })
   } else {
     response.status(404).end()
   }
@@ -140,21 +165,25 @@ usersRouter.put('/:id', async (request, response) => {
     }
 
     let user = {
-      username: body.username || userToUpdate.username,
-      name: body.name || userToUpdate.name,
-      surname: body.surname || userToUpdate.surname,
-      bio: body.bio || userToUpdate.bio,
-      email: body.email || userToUpdate.email,
-      image: body.image || userToUpdate.image,
-      likes: body.likes || userToUpdate.likes,
-      followers: body.followers || userToUpdate.followers,
-      following: body.following || userToUpdate.following,
-      verified: body.verified || userToUpdate.verified,
-      zumbies: body.zumbies || userToUpdate.zumbies,
+      username: body.username,
+      name: body.name,
+      surname: body.surname,
+      bio: body.bio,
+      email: body.email,
+      image: body.image,
+      likes: body.likes,
+      followers: body.followers,
+      following: body.following,
+      verified: body.verified,
+      zumbies: body.zumbies,
       passwordHash: passwordHash
     }
 
-    const updatedUser = await User.findByIdAndUpdate(request.params.id, user, { new: true })
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: request.params.id },
+      user,
+      { new: true, runValidators: true, context: 'query' }
+    );
     response.json(updatedUser)
   } else {
     response.status(404).json({ error: 'user not found' })

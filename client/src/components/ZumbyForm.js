@@ -12,23 +12,14 @@ export default function ZumbyForm({ loggedUser, zumbies, setZumbies, prevZumby }
         let zumby = await zumbyService.create(values)
         resetForm()
 
-        if (prevZumby) { // If prevZumby is passed, it means that the ZumbyForm is being used to create a comment
-          // we change the prevZumby object to add the new comment (only its id) to the comments array
-          // the comments array is an array of ids of the comments so we have to change the ...prevZumby.comments to get only the id of those comments we already have (not the whole comment object)
+        if (prevZumby) { 
           const comments = prevZumby.comments.map(comment => comment.id)
           prevZumby.comments = [...comments, zumby.id]
           zumbyService.update(prevZumby.id, prevZumby)
-          // setZumbies([zumby, ...zumbies])
-        // } else {
 
-          // for some reason this doesn't work, the zumbies container will render again but all zumbies are ids and not objects so it will crash
         }
         zumby.user = loggedUser
-
-        setZumbies([zumby, ...zumbies]) // not working on ZumbyDetails page 
-
-
-
+        setZumbies(zumbies => [zumby, ...zumbies])
       } catch (error) {
         console.error(error)
       }

@@ -8,7 +8,7 @@ import { HiOutlineTrash } from "react-icons/hi";
 import { showMessage } from "../utils/utils"
 
 
-export default function ZumbyCard({ zumby, loggedUser, condition }) {
+export default function ZumbyCard({ zumby, loggedUser, condition, setSavedZumbies }) {
 
   const [zumby_, setZumby_] = useState({
     id: "",
@@ -61,6 +61,9 @@ export default function ZumbyCard({ zumby, loggedUser, condition }) {
     if (liked) {
       loggedUser.likes = loggedUser.likes.filter((like) => like !== zumby_.id);
       zumby_.likes = zumby_.likes.filter((like) => like !== loggedUser.id);
+      if (setSavedZumbies){
+        setSavedZumbies((prev) => prev.filter((zumby) => zumby.id !== zumby_.id));
+      }
     } else {
       loggedUser.likes = [...loggedUser.likes, zumby_.id];
       zumby_.likes = [...zumby_.likes, loggedUser.id];
@@ -109,7 +112,7 @@ export default function ZumbyCard({ zumby, loggedUser, condition }) {
           <img
             src={image}
             alt="User profile icon"
-            className="rounded-full p-2 h-20 w-20 md:h-28 md:w-28"
+            className="rounded-full object-cover p-2 h-20 w-20 md:h-28 md:w-28"
           />
         </div>
         <div className="flex flex-col w-9/12">
@@ -183,9 +186,10 @@ function parseDateTime(datetime) {
 
   const date = new Date(datetime);
   const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
+  let month = date.getMonth() + 1;
+  let hours = date.getHours();
+  if (hours < 10) hours = "0" + hours;
+  let minutes = date.getMinutes();
+  if (minutes < 10) minutes = "0" + minutes;
   return `${day}/${month} - ${hours}:${minutes}`;
 }

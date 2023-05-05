@@ -31,7 +31,7 @@ zumbiesRouter.post('/', async (request, response) => {
 })
 
 zumbiesRouter.get('/', async (request, response) => {
-  const zumbies = await Zumby.find({}).populate('user', { username: 1, name: 1, image: 1 })
+  const zumbies = await Zumby.find({}).populate('user', { username: 1, name: 1, image: 1, private: 1 }).sort({ date: -1 })
   response.json(zumbies.map((u) => u.toJSON()))
 })
 

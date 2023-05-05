@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ZumbyCard from './ZumbyCard';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-export default function ZumbiesContainer({ zumbies, loggedUser }) {  
+export default function ZumbiesContainer({ zumbies, loggedUser, setSavedZumbies }) {  
   const [hasMore, setHasMore] = useState(true)
   const [shownZumbies, setShownZumbies] = useState(5)
 
@@ -48,16 +48,6 @@ export default function ZumbiesContainer({ zumbies, loggedUser }) {
       >
         {renderedZumbies}
       </InfiniteScroll>
-      {/* {zumbies.map((zumby) => {
-        return (
-          <ZumbyCard
-            key={zumby.id}
-            zumby={zumby}
-            loggedUser = {loggedUser}
-            condition = {true}
-          />
-        );
-      })} */}
     </div>
   );
 }

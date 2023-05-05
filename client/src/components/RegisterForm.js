@@ -42,7 +42,7 @@ const validate = (values) => {
     errors.surname = 'Los apellidos deben contener al menos 3 caracteres'
   }
 
-  if (values.bio && values.bio.length > 241) {
+  if (values.bio && values.bio.length > 240) {
     errors.bio = 'La biografía no puede tener más de 240 caracteres'
   }
 

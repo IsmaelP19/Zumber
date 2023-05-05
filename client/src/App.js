@@ -7,6 +7,9 @@ import Notification from './components/Notification';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import Index from './components/Index';
+import SavedZumbies from './components/SavedZumbies';
+import FollowingUsers from './components/FollowingZumbies';
+import ProfileForm from './components/ProfileForm';
 import Profile from './components/Profile';
 import Error404 from './components/Error404';
 import ZumbyDetails from './components/ZumbyDetails';
@@ -50,10 +53,16 @@ export default function App() {
       <div className={`flex-1 flex flex-col bg-light-blue ${style}`} id='main'>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index isLogged={isLogged} loggedUser={user} setMessage={setMessage} />} />
+            <Route path="/" element={<Index loggedUser={user} setMessage={setMessage} />} />
             <Route path="/register" element={<RegisterForm setMessage={setMessage} />} />
             <Route path="/login" element={isLogged ? <Navigate to="/" /> : <LoginForm setMessage={setMessage} isLogged={isLogged} />} />
-            <Route path="/saved" element={<h1>This is a saved page</h1>} />
+            <Route path="/saved" element={isLogged ? <SavedZumbies loggedUser={user} /> : <Navigate to="/login" />} />
+            {/* <Route path="/profile/edit" element={isLogged ? <ProfileForm setMessage={setMessage} loggedUser={user} />: <Navigate to="/" />} /> */}
+            <Route path="/profile/edit" element={<ProfileForm setMessage={setMessage} loggedUser={user} />} />
+            { /* <Route path="/saved" element={isLogged ? <SavedZumbies loggedUser={user} /> : <Navigate to="/login" />} /> */ }
+            <Route path="/saved" element={<SavedZumbies loggedUser={user} />} />
+            { /* <Route path="/following" element={isLogged ? <FollowingUsers loggedUser={user} /> : <Navigate to="/login" />} /> */ }
+            <Route path="/following" element={<FollowingUsers loggedUser={user} />} />
             <Route path="/profile/:username" element={<Profile loggedUser={user} />} />
             <Route path="/:zumbyId" element={<ZumbyDetails loggedUser={user} />} />
             <Route path="*" element={<Error404 />} />
