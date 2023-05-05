@@ -5,6 +5,10 @@ import ZumbyForm from "./ZumbyForm";
 import { showMessage } from "../utils/utils";
 export default function Index({ loggedUser, setMessage }) {
 
+  useEffect(() => {
+    document.title = "Zumber | Inicio";
+  }, []);
+
   const [zumbies, setZumbies] = useState([]);
 
   useEffect(() => {

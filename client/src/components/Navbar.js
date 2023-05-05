@@ -1,4 +1,4 @@
-import logo from '../logo.svg'
+import logo from '../logo.png'
 import { useState } from 'react'
 
 export default function Navbar({ user }) {

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import registerService from "../services/register"
 import Button from "./Button"
 import FormInput from "./FormInput"
@@ -51,6 +51,11 @@ const validate = (values) => {
 
 
 export default function RegisterForm ({ setMessage }) {
+
+  useEffect(() => {
+    document.title = "Zumber | Registro";
+  }, []);
+
   const [errorMessage, setErrorMessage] = useState(null);
 
   function handleChange(event) {

@@ -4,7 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 export default function ZumbiesContainer({ zumbies, loggedUser, setSavedZumbies }) {  
   const [hasMore, setHasMore] = useState(true)
-  const [shownZumbies, setShownZumbies] = useState(5)
+  const [shownZumbies, setShownZumbies] = useState(10)
 
   const [isDone, setIsDone] = useState(false)
 

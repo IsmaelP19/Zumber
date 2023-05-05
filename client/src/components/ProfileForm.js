@@ -53,6 +53,10 @@ const validate = (values) => {
 
 
 export default function ProfileForm ({ setMessage, loggedUser }) {
+
+  useEffect(() => {
+    document.title = "Zumber | Editar Perfil";
+  }, []);
   
   const [errorMessage, setErrorMessage] = useState(null);
 

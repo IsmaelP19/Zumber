@@ -21,6 +21,11 @@ const validate = (values) => {
 
 
 export default function LoginForm ({ setMessage, isLogged }) {
+
+  useEffect(() => {
+    document.title = "Zumber | Inicio de sesión";
+  }, []);
+
   const [isDone, setIsDone] = useState(false)
 
   useEffect(() => {

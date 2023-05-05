@@ -6,10 +6,15 @@ import ZumbyForm from './ZumbyForm';
 import ZumbiesContainer from './ZumbiesContainer';
 
 export default function ZumbyDetails({ loggedUser }) {
+
+  useEffect(() => {
+    document.title = "Zumber | Detalles Zumby";
+  }, []);
+
   const zumbyId = useParams().zumbyId;
 
   const [zumby, setZumby] = useState(null);
-  const [comments, setComments] = useState([]); // for the comments
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     const hook = async () => {

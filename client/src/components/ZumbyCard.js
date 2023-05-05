@@ -86,7 +86,7 @@ export default function ZumbyCard({ zumby, loggedUser, condition, setSavedZumbie
         user.likes = user.likes.filter((like) => like !== zumby_.id);
         await userService.update(user.id, user);
       })
-      zumby_.comments.forEach(async (comment) => {  // el comment es el id del user
+      zumby_.comments.forEach(async (comment) => {
         const user = await userService.getUser(comment);
         user.comments = user.comments.filter((comment) => comment !== zumby_.id);
         await userService.update(user.id, user);

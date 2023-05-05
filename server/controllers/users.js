@@ -146,9 +146,6 @@ usersRouter.put('/:id', async (request, response) => {
     return response.status(400).json({ error: "bio is too long" });
   }
 
-  // The next lines should be uncommented when we have the frontend working
-  // It is not working now because if we try to login within the rest file, the token is generated different each time
-  // and we cannot use it to update the user. We will use localStorage to store the token on cache.
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
   if (!request.token || !decodedToken.id) {

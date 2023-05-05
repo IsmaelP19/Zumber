@@ -1,6 +1,7 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import RegisterForm from './components/RegisterForm';
 import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
@@ -20,10 +21,7 @@ export default function App() {
   const [message, setMessage] = useState([]);
   const [isLogged, setIsLogged] = useState(false);
   const [user, setUser] = useState(null);
-
-  // we will add a different style only on login and register pages
-  const style = window.location.pathname === "/login" || window.location.pathname === "/register" ? "justify-center" : "";
-
+  const [style, setStyle] = useState("");
 
   useEffect(() => {
     const hook = async () => {
@@ -34,6 +32,9 @@ export default function App() {
         const response = await userService.getUserByUsername(user.username);
         response.token = user.token;
         setUser(response);
+      }
+      if (window.location.pathname === "/login" || window.location.pathname === "/register" || ((window.location.pathname === "/saved" || window.location.pathname === "/following" || window.location.pathname === "/profile/edit" || window.location.pathname === "/profile/:username" || window.location.pathname === "/:zumbyId") && !loggedUser)) {
+        setStyle("justify-center");
       }
       setIsDone(true);
     }
@@ -57,14 +58,10 @@ export default function App() {
             <Route path="/register" element={<RegisterForm setMessage={setMessage} />} />
             <Route path="/login" element={isLogged ? <Navigate to="/" /> : <LoginForm setMessage={setMessage} isLogged={isLogged} />} />
             <Route path="/saved" element={isLogged ? <SavedZumbies loggedUser={user} /> : <Navigate to="/login" />} />
-            {/* <Route path="/profile/edit" element={isLogged ? <ProfileForm setMessage={setMessage} loggedUser={user} />: <Navigate to="/" />} /> */}
-            <Route path="/profile/edit" element={<ProfileForm setMessage={setMessage} loggedUser={user} />} />
-            { /* <Route path="/saved" element={isLogged ? <SavedZumbies loggedUser={user} /> : <Navigate to="/login" />} /> */ }
-            <Route path="/saved" element={<SavedZumbies loggedUser={user} />} />
-            { /* <Route path="/following" element={isLogged ? <FollowingUsers loggedUser={user} /> : <Navigate to="/login" />} /> */ }
-            <Route path="/following" element={<FollowingUsers loggedUser={user} />} />
-            <Route path="/profile/:username" element={<Profile loggedUser={user} />} />
-            <Route path="/:zumbyId" element={<ZumbyDetails loggedUser={user} />} />
+            <Route path="/profile/edit" element={isLogged ? <ProfileForm setMessage={setMessage} loggedUser={user} />: <Navigate to="/login" />} />
+            <Route path="/following" element={isLogged ? <FollowingUsers loggedUser={user} /> : <Navigate to="/login" />} />
+            <Route path="/profile/:username" element={isLogged ? <Profile loggedUser={user} /> : <Navigate to="/login" />} />
+            <Route path="/:zumbyId" element={isLogged ? <ZumbyDetails loggedUser={user} /> : <Navigate to="/login" />} />
             <Route path="*" element={<Error404 />} />
           </Routes>
         </BrowserRouter>

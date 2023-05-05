@@ -4,6 +4,11 @@ import Button from './Button'
 import { useEffect, useState } from 'react'
 
 export default function Error404() {
+
+  useEffect(() => {
+    document.title = "Zumber | 404";
+  }, []);
+
   const [isDone, setIsDone] = useState(false)
   useEffect (() => {
     document.getElementById('main').classList.add('justify-center')

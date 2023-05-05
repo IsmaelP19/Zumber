@@ -7,6 +7,11 @@ import Button from "./Button"
 import ZumbiesContainer from "./ZumbiesContainer"
 
 export default function Profile({ loggedUser }) {
+
+  useEffect(() => {
+    document.title = "Zumber | Perfil";
+  }, []);
+
   const { username } = useParams()
   const [isDone, setIsDone] = useState(false)
   const [user, setUser] = useState(null)
