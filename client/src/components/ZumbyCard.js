@@ -82,7 +82,7 @@ export default function ZumbyCard({ zumby, loggedUser, setSavedZumbies }) {
           <img
             src={image}
             alt="User profile icon"
-            className="rounded-full p-2 h-20 w-20 md:h-28 md:w-28"
+            className="rounded-full object-cover p-2 h-20 w-20 md:h-28 md:w-28"
           />
         </div>
         <div className="flex flex-col w-9/12">

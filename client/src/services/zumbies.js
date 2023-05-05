@@ -1,5 +1,6 @@
 import axios from "axios";
-const baseURL = process.env.REACT_APP_BASE_URL + "/zumbies";
+// const baseURL = process.env.REACT_APP_BASE_URL + "/zumbies";
+const baseURL = "http://localhost:3003/api/zumbies";
 
 const getAll = () => {
   const request = axios.get(baseURL);
