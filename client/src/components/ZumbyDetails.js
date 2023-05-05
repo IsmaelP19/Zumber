@@ -35,8 +35,13 @@ export default function ZumbyDetails({ loggedUser }) {
   return (
     <div className='flex flex-col items-center '>
       <div className='w-full md:w-110'>
-        <ZumbyCard zumby={zumby} loggedUser={loggedUser} />
-        <ZumbyForm loggedUser={loggedUser} prevZumby={zumby} zumbies={comments} setZumbies={setComments} />
+        <ZumbyCard zumby={zumby} loggedUser={loggedUser} commentsState={comments} main={true} />
+        {loggedUser ? (
+          <ZumbyForm loggedUser={loggedUser} prevZumby={zumby} setPrevZumby={setZumby} zumbies={comments} setZumbies={setComments} />
+        ) : (
+          <></>
+        )
+        }
 
         {comments.length > 0 ? (
           <ZumbiesContainer zumbies={comments} loggedUser={loggedUser} />

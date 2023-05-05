@@ -6,7 +6,6 @@ const zumbiesRouter = require('express').Router()
 zumbiesRouter.post('/', async (request, response) => {
   const body = request.body
 
-  //Check if user with id body.user exists
   const user = await User.findById(body.user)
 
   if (!user) {
@@ -22,6 +21,7 @@ zumbiesRouter.post('/', async (request, response) => {
   const zumby = new Zumby({
     content: body.content,
     user: user._id,
+    commented: body.commented || null,
   })
 
   const savedZumby = await zumby.save()
@@ -31,18 +31,19 @@ zumbiesRouter.post('/', async (request, response) => {
 })
 
 zumbiesRouter.get('/', async (request, response) => {
-  const zumbies = await Zumby.find({}).populate('user', { username: 1, name: 1, image: 1, private: 1 }).sort({ date: -1 })
+  const zumbies = await Zumby.find({}).populate('user', { username: 1, name: 1, image: 1, private: 1, id: 1 }).sort({ date: -1 })
   response.json(zumbies.map((u) => u.toJSON()))
 })
 
 zumbiesRouter.get('/:id', async (request, response) => {
   const zumby = await Zumby.findById(request.params.id)
-    .populate('user', {username: 1,  name: 1, image: 1 })
+    .populate('user', { username: 1, name: 1, image: 1 })
     .populate({
       path: 'comments',
       populate: {
         path: 'user',
         select: { username: 1, name: 1, image: 1 }
+
       }
     })
 
@@ -53,7 +54,7 @@ zumbiesRouter.get('/:id', async (request, response) => {
   }
 })
 
-zumbiesRouter.delete('/:id', async (request, response) => { 
+zumbiesRouter.delete('/:id', async (request, response) => {
 
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
@@ -62,7 +63,7 @@ zumbiesRouter.delete('/:id', async (request, response) => {
   }
 
   const zumbyToDelete = await Zumby.findById(request.params.id)
-  if(zumbyToDelete) {
+  if (zumbyToDelete) {
     if (zumbyToDelete.user.toString() === decodedToken.id.toString()) {
       const usersThatLiked = await User.find({ likes: zumbyToDelete._id })
       usersThatLiked.forEach(async (user) => {
@@ -74,7 +75,7 @@ zumbiesRouter.delete('/:id', async (request, response) => {
       await userToDeleteZumby.save()
       await zumbyToDelete.remove()
       response.status(204).end()
-      
+
     } else {
       response.status(401).json({ error: 'unauthorized' })
     }

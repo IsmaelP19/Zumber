@@ -33,7 +33,7 @@ export default function App() {
         response.token = user.token;
         setUser(response);
       }
-      if (window.location.pathname === "/login" || window.location.pathname === "/register" || ((window.location.pathname === "/saved" || window.location.pathname === "/following" || window.location.pathname === "/profile/edit" || window.location.pathname === "/profile/:username" || window.location.pathname === "/:zumbyId") && !loggedUser)) {
+      if (window.location.pathname === "/login" || window.location.pathname === "/register" || ((window.location.pathname === "/saved" || window.location.pathname === "/following" || window.location.pathname === "/profile/edit" || window.location.pathname.includes('profile')) && !loggedUser)) {
         setStyle("justify-center");
       }
       setIsDone(true);
@@ -61,7 +61,7 @@ export default function App() {
             <Route path="/profile/edit" element={isLogged ? <ProfileForm setMessage={setMessage} loggedUser={user} />: <Navigate to="/login" />} />
             <Route path="/following" element={isLogged ? <FollowingUsers loggedUser={user} /> : <Navigate to="/login" />} />
             <Route path="/profile/:username" element={isLogged ? <Profile loggedUser={user} /> : <Navigate to="/login" />} />
-            <Route path="/:zumbyId" element={isLogged ? <ZumbyDetails loggedUser={user} /> : <Navigate to="/login" />} />
+            <Route path="/:zumbyId" element={<ZumbyDetails loggedUser={user} />} />
             <Route path="*" element={<Error404 />} />
           </Routes>
         </BrowserRouter>

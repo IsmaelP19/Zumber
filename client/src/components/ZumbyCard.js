@@ -5,10 +5,8 @@ import defaultImage from "../utils/static/default.jpg";
 import { FcLikePlaceholder, FcLike } from "react-icons/fc";
 import { AiOutlineMessage } from "react-icons/ai";
 import { HiOutlineTrash } from "react-icons/hi";
-import { showMessage } from "../utils/utils"
 
-
-export default function ZumbyCard({ zumby, loggedUser, condition, setSavedZumbies }) {
+export default function ZumbyCard({ zumby, loggedUser, commentsState, condition, setSavedZumbies, main }) {
 
   const [zumby_, setZumby_] = useState({
     id: "",
@@ -19,6 +17,7 @@ export default function ZumbyCard({ zumby, loggedUser, condition, setSavedZumbie
     },
     content: "",
     likes: [],
+    commented: null,
     comments: [],
     date: "",
   })
@@ -34,6 +33,7 @@ export default function ZumbyCard({ zumby, loggedUser, condition, setSavedZumbie
         },
         content: zumby.content,
         likes: zumby.likes,
+        commented: zumby.commented,
         comments: zumby.comments,
         date: zumby.date,
       })
@@ -61,7 +61,7 @@ export default function ZumbyCard({ zumby, loggedUser, condition, setSavedZumbie
     if (liked) {
       loggedUser.likes = loggedUser.likes.filter((like) => like !== zumby_.id);
       zumby_.likes = zumby_.likes.filter((like) => like !== loggedUser.id);
-      if (setSavedZumbies){
+      if (setSavedZumbies) {
         setSavedZumbies((prev) => prev.filter((zumby) => zumby.id !== zumby_.id));
       }
     } else {
@@ -74,23 +74,27 @@ export default function ZumbyCard({ zumby, loggedUser, condition, setSavedZumbie
     setLiked(!liked);
   }
 
-  function handleDelete() {
+  async function handleDelete() {
     if (window.confirm("¿De verdad deseas eliminar este zumby?")) {
-      zumbyService.setToken(loggedUser.token);
-      zumbyService.remove(zumby_.id,);
-      userService.setToken(loggedUser.token);
+      await zumbyService.setToken(loggedUser.token);
+      
+      await userService.setToken(loggedUser.token);
       loggedUser.zumbies = loggedUser.zumbies.filter((zumby) => zumby !== zumby_.id);
-      // we also have to update the users that liked this zumby and the users that commented this zumby
       zumby_.likes.forEach(async (like) => {
         const user = await userService.getUser(like);
         user.likes = user.likes.filter((like) => like !== zumby_.id);
         await userService.update(user.id, user);
       })
-      zumby_.comments.forEach(async (comment) => {
-        const user = await userService.getUser(comment);
-        user.comments = user.comments.filter((comment) => comment !== zumby_.id);
-        await userService.update(user.id, user);
-      })
+
+      if (zumby_.commented !== null) {
+        const prevZumby = await zumbyService.getZumby(zumby_.commented);
+        prevZumby.comments = prevZumby.comments.filter((comment) => comment.id !== zumby_.id);
+        prevZumby.user = prevZumby.user.id;
+        prevZumby.comments = prevZumby.comments.map((comment) => comment.id);
+        await zumbyService.update(prevZumby.id, prevZumby);
+      }
+
+      await zumbyService.remove(zumby_.id);
 
       userService.update(loggedUser.id, loggedUser);
 
@@ -138,7 +142,8 @@ export default function ZumbyCard({ zumby, loggedUser, condition, setSavedZumbie
           {loggedUser ? (
             <div className="flex flex-row justify-around h-10 mb-1 text-lg">
               <span className="flex items-center text-light-gray font-bold">
-                {comments}&nbsp;&nbsp;
+                {commentsState ? commentsState.length : comments}&nbsp;&nbsp;
+                {/* {comments} */}
                 <button onClick={() => {
                   window.location.href = `/${zumby_.id}`
                 }}>
@@ -151,7 +156,7 @@ export default function ZumbyCard({ zumby, loggedUser, condition, setSavedZumbie
                   {liked ? <FcLike /> : <FcLikePlaceholder />}
                 </button>
               </span>
-              {
+              { main &&
                 loggedUser.id === zumby_.user.id ? (
                   <span className="flex items-center text-light-gray font-bold">
                     <button onClick={handleDelete}>

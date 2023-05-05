@@ -1,11 +1,12 @@
 import { useFormik } from "formik"
 import zumbyService from "../services/zumbies"
-export default function ZumbyForm({ loggedUser, zumbies, setZumbies, prevZumby }) {
+export default function ZumbyForm({ loggedUser, zumbies, setZumbies, prevZumby, setPrevZumby }) {
 
   const formik = useFormik({
     initialValues: {
       content: "",
-      user: loggedUser.id
+      user: loggedUser.id,
+      commented: prevZumby ? prevZumby.id : null
     },
     onSubmit: async (values, { resetForm }) => {
       try {
@@ -13,13 +14,19 @@ export default function ZumbyForm({ loggedUser, zumbies, setZumbies, prevZumby }
         resetForm()
 
         if (prevZumby) { 
-          const comments = prevZumby.comments.map(comment => comment.id)
+          let comments
+          if(typeof prevZumby.comments[0] !== "string"){
+            comments = prevZumby.comments = prevZumby.comments.map(comment => comment.id)
+          } else {
+            comments = prevZumby.comments
+          }
           prevZumby.comments = [...comments, zumby.id]
           zumbyService.update(prevZumby.id, prevZumby)
-
+          // zumbyService.update(zumby.id, zumby) // not sure if this is necessary
         }
         zumby.user = loggedUser
         setZumbies(zumbies => [zumby, ...zumbies])
+        setPrevZumby(prevZumby)
       } catch (error) {
         console.error(error)
       }

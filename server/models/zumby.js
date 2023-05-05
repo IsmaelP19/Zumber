@@ -17,6 +17,10 @@ const zumbySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
+  commented: {  
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Zumby'
+  },
   comments: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -35,7 +39,7 @@ zumbySchema.plugin(uniqueValidator)
 
 zumbySchema.set('toJSON', {
   transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
+    returnedObject.id = returnedObject._id
     delete returnedObject._id
     delete returnedObject.__v
   }

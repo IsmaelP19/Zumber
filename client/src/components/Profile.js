@@ -107,7 +107,7 @@ export default function Profile({ loggedUser }) {
         </div>
       </div>
 
-      <ZumbiesContainer zumbies={zumbies} loggedUser={loggedUser} />
+      <ZumbiesContainer zumbies={zumbies} loggedUser={loggedUser} main={true} />
     </div>
 
   ) : null
