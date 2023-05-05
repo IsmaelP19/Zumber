@@ -12,6 +12,7 @@ import FollowingUsers from './components/FollowingZumbies';
 import ProfileForm from './components/ProfileForm';
 import Profile from './components/Profile';
 import Error404 from './components/Error404';
+import ZumbyDetails from './components/ZumbyDetails';
 import userService from './services/users';
 
 export default function App() {
@@ -42,17 +43,17 @@ export default function App() {
   if (!isDone) {
     return null;
   }
-
+  
   return (
     <div className="App flex flex-col min-h-screen">
       <Navbar user={user} />
       <div className='bg-light-blue border-0 border-none'>
-        <Notification message={message[0]} type={message[1]} />
+        <Notification message={message[0]} type={message[1]}  />
       </div>
       <div className={`flex-1 flex flex-col bg-light-blue ${style}`} id='main'>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index loggedUser={user} />} />
+            <Route path="/" element={<Index loggedUser={user} setMessage={setMessage} />} />
             <Route path="/register" element={<RegisterForm setMessage={setMessage} />} />
             <Route path="/login" element={isLogged ? <Navigate to="/" /> : <LoginForm setMessage={setMessage} isLogged={isLogged} />} />
             <Route path="/saved" element={isLogged ? <SavedZumbies loggedUser={user} /> : <Navigate to="/login" />} />
@@ -63,6 +64,7 @@ export default function App() {
             { /* <Route path="/following" element={isLogged ? <FollowingUsers loggedUser={user} /> : <Navigate to="/login" />} /> */ }
             <Route path="/following" element={<FollowingUsers loggedUser={user} />} />
             <Route path="/profile/:username" element={<Profile loggedUser={user} />} />
+            <Route path="/:zumbyId" element={<ZumbyDetails loggedUser={user} />} />
             <Route path="*" element={<Error404 />} />
           </Routes>
         </BrowserRouter>

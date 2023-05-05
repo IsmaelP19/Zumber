@@ -4,8 +4,11 @@ import zumbyService from "../services/zumbies";
 import defaultImage from "../utils/static/default.jpg";
 import { FcLikePlaceholder, FcLike } from "react-icons/fc";
 import { AiOutlineMessage } from "react-icons/ai";
+import { HiOutlineTrash } from "react-icons/hi";
+import { showMessage } from "../utils/utils"
 
-export default function ZumbyCard({ zumby, loggedUser, setSavedZumbies }) {
+
+export default function ZumbyCard({ zumby, loggedUser, condition, setSavedZumbies }) {
 
   const [zumby_, setZumby_] = useState({
     id: "",
@@ -21,7 +24,7 @@ export default function ZumbyCard({ zumby, loggedUser, setSavedZumbies }) {
   })
 
   useEffect(() => {
-    if(zumby){
+    if (zumby) {
       setZumby_({
         id: zumby.id,
         user: {
@@ -46,7 +49,7 @@ export default function ZumbyCard({ zumby, loggedUser, setSavedZumbies }) {
       zumby_.likes.filter((like) => like === loggedUser.id).length > 0
         ? setLiked(true)
         : setLiked(false);
-    } 
+    }
   }, [loggedUser, zumby_.likes]);
 
   useEffect(() => {
@@ -71,11 +74,38 @@ export default function ZumbyCard({ zumby, loggedUser, setSavedZumbies }) {
     setLiked(!liked);
   }
 
+  function handleDelete() {
+    if (window.confirm("¿De verdad deseas eliminar este zumby?")) {
+      zumbyService.setToken(loggedUser.token);
+      zumbyService.remove(zumby_.id,);
+      userService.setToken(loggedUser.token);
+      loggedUser.zumbies = loggedUser.zumbies.filter((zumby) => zumby !== zumby_.id);
+      // we also have to update the users that liked this zumby and the users that commented this zumby
+      zumby_.likes.forEach(async (like) => {
+        const user = await userService.getUser(like);
+        user.likes = user.likes.filter((like) => like !== zumby_.id);
+        await userService.update(user.id, user);
+      })
+      zumby_.comments.forEach(async (comment) => {  // el comment es el id del user
+        const user = await userService.getUser(comment);
+        user.comments = user.comments.filter((comment) => comment !== zumby_.id);
+        await userService.update(user.id, user);
+      })
+
+      userService.update(loggedUser.id, loggedUser);
+
+      const message = ['Zumby eliminado correctamente', 'success']
+      localStorage.setItem('message', JSON.stringify(message))
+      window.location.href = "/";
+
+    }
+  }
+
   const image = zumby_.user.image || defaultImage;
 
-  if (zumby_.user.private){
+  if (zumby_.user.private) {
     return <></>
-  }else{
+  } else {
     return (
       <div className="bg-dark-blue my-2 mx-1 rounded-xl flex flex-row ">
         <div className="flex justify-center items-center w-3/12">
@@ -89,30 +119,50 @@ export default function ZumbyCard({ zumby, loggedUser, setSavedZumbies }) {
           <div className="flex flex-row font-bold justify-between text-light-gray">
             <div className="ml-2" >
               <a href={`/profile/${zumby_.user.username}`} className="cursor-pointer hover:underline">
-              {zumby_.user.username}
+                {zumby_.user.username}
               </a>
             </div>
             <div className="mr-3">{parseDateTime(zumby_.date)}</div>
           </div>
           <div className="flex flex-row font-bold h-full">
-            <div className="w-full items-center justify-center bg-light-blue mx-2 my-3 rounded-xl flex">
+            <div className={`w-full items-center justify-center bg-light-blue mx-2 my-3 rounded-xl flex ${condition ? "cursor-pointer hover:bg-red-100 transition-all duration-300" : ""} `}
+              onClick={() => {
+                if (condition) {
+                  window.location.href = `/${zumby_.id}`
+                }
+              }}
+            >
               <div className="p-2">{zumby_.content}</div>
             </div>
           </div>
           {loggedUser ? (
             <div className="flex flex-row justify-around h-10 mb-1 text-lg">
-              <span className="text-light-gray font-bold">
+              <span className="flex items-center text-light-gray font-bold">
                 {comments}&nbsp;&nbsp;
-                <button>
+                <button onClick={() => {
+                  window.location.href = `/${zumby_.id}`
+                }}>
                   <AiOutlineMessage />
                 </button>
               </span>
-              <span className="text-light-gray font-bold">
+              <span className="flex items-center text-light-gray font-bold">
                 {likes}&nbsp;&nbsp;
                 <button onClick={handleClick}>
                   {liked ? <FcLike /> : <FcLikePlaceholder />}
                 </button>
               </span>
+              {
+                loggedUser.id === zumby_.user.id ? (
+                  <span className="flex items-center text-light-gray font-bold">
+                    <button onClick={handleDelete}>
+                      <HiOutlineTrash />
+                    </button>
+                  </span>
+                ) : (
+                  <></>
+                )
+
+              }
             </div>
           ) : (
             <div className="flex flex-row justify-around h-10 mb-1 text-lg">
@@ -130,7 +180,7 @@ export default function ZumbyCard({ zumby, loggedUser, setSavedZumbies }) {
   }
 }
 
-function parseDateTime(datetime){
+function parseDateTime(datetime) {
 
   if (!datetime) return "";
 

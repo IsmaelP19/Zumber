@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 const Zumby = require('../models/zumby')
 const User = require('../models/user')
 const zumbiesRouter = require('express').Router()
@@ -36,6 +37,15 @@ zumbiesRouter.get('/', async (request, response) => {
 
 zumbiesRouter.get('/:id', async (request, response) => {
   const zumby = await Zumby.findById(request.params.id)
+    .populate('user', {username: 1,  name: 1, image: 1 })
+    .populate({
+      path: 'comments',
+      populate: {
+        path: 'user',
+        select: { username: 1, name: 1, image: 1 }
+      }
+    })
+
   if (zumby) {
     response.json(zumby.toJSON())
   } else {
@@ -43,14 +53,31 @@ zumbiesRouter.get('/:id', async (request, response) => {
   }
 })
 
-zumbiesRouter.delete('/:id', async (request, response) => {
+zumbiesRouter.delete('/:id', async (request, response) => { 
+
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+  if (!request.token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+
   const zumbyToDelete = await Zumby.findById(request.params.id)
-  if (zumbyToDelete) {
-    const userToDeleteZumby = await User.findById(zumbyToDelete.user)
-    userToDeleteZumby.zumbies = userToDeleteZumby.zumbies.filter(z => z.toString() !== zumbyToDelete._id.toString())
-    await userToDeleteZumby.save()
-    await zumbyToDelete.remove()
-    response.status(204).end()
+  if(zumbyToDelete) {
+    if (zumbyToDelete.user.toString() === decodedToken.id.toString()) {
+      const usersThatLiked = await User.find({ likes: zumbyToDelete._id })
+      usersThatLiked.forEach(async (user) => {
+        user.likes = user.likes.filter(z => z.toString() !== zumbyToDelete._id.toString())
+        await user.save()
+      })
+      const userToDeleteZumby = await User.findById(zumbyToDelete.user)
+      userToDeleteZumby.zumbies = userToDeleteZumby.zumbies.filter(z => z.toString() !== zumbyToDelete._id.toString())
+      await userToDeleteZumby.save()
+      await zumbyToDelete.remove()
+      response.status(204).end()
+      
+    } else {
+      response.status(401).json({ error: 'unauthorized' })
+    }
   } else {
     response.status(404).json({ error: 'zumby not found' })
   }
@@ -80,6 +107,6 @@ zumbiesRouter.put('/:id', async (request, response) => {
     response.status(404).json({ error: 'zumby not found' })
   }
 })
-  
+
 
 module.exports = zumbiesRouter

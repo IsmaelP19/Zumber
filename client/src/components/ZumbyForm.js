@@ -1,6 +1,6 @@
 import { useFormik } from "formik"
 import zumbyService from "../services/zumbies"
-export default function ZumbyForm({ loggedUser, zumbies, setZumbies }) {
+export default function ZumbyForm({ loggedUser, zumbies, setZumbies, prevZumby }) {
 
   const formik = useFormik({
     initialValues: {
@@ -11,6 +11,13 @@ export default function ZumbyForm({ loggedUser, zumbies, setZumbies }) {
       try {
         let zumby = await zumbyService.create(values)
         resetForm()
+
+        if (prevZumby) { 
+          const comments = prevZumby.comments.map(comment => comment.id)
+          prevZumby.comments = [...comments, zumby.id]
+          zumbyService.update(prevZumby.id, prevZumby)
+
+        }
         zumby.user = loggedUser
         setZumbies(zumbies => [zumby, ...zumbies])
       } catch (error) {
@@ -22,7 +29,7 @@ export default function ZumbyForm({ loggedUser, zumbies, setZumbies }) {
       const errors = {}
       if (!values.content) {
         errors.content = "No puedes crear un zumby vacío"
-      } else if(values.content.length > 140) {
+      } else if (values.content.length > 140) {
         errors.content = "Sólo se permiten 140 caracteres por zumby"
       }
       return errors

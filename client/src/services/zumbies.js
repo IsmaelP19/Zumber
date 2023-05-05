@@ -1,9 +1,20 @@
 import axios from "axios";
 // const baseURL = process.env.REACT_APP_BASE_URL + "/zumbies";
-const baseURL = "http://localhost:3003/api/zumbies";
+const baseURL = "http://localhost:3003/http://localhost:3003/api/zumbies";
+
+let token = null;
+
+const setToken = (newToken) => {
+  token = `bearer ${newToken}`;
+};
 
 const getAll = () => {
   const request = axios.get(baseURL);
+  return request.then((response) => response.data);
+};
+
+const getZumby = (id) => {
+  const request = axios.get(`${baseURL}/${id}`);
   return request.then((response) => response.data);
 };
 
@@ -17,4 +28,12 @@ const create = async (newZumby) => {
   return response.data;
 };
 
-export default { getAll, update, create };
+const remove = async (id) => {
+  const config = {
+    headers: { Authorization: token },
+};
+  const response = await axios.delete(`${baseURL}/${id}`, config);
+  return response.data;
+};
+
+export default { setToken, getAll, getZumby, update, create, remove };
